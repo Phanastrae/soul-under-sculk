@@ -1,5 +1,7 @@
 package phanastrae.soul_under_sculk.item;
 
+import net.minecraft.client.item.TooltipContext;
+import net.minecraft.client.item.TooltipData;
 import net.minecraft.entity.ExperienceOrbEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
@@ -7,13 +9,15 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Rarity;
-import net.minecraft.util.TypedActionResult;
+import net.minecraft.text.Text;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 import phanastrae.soul_under_sculk.block.CreativeVerumChargerBlock;
 import phanastrae.soul_under_sculk.block.ModBlocks;
+
+import java.util.List;
+import java.util.Optional;
 
 public class VerumItem extends Item {
 	public VerumItem(Settings settings) {
@@ -100,6 +104,25 @@ public class VerumItem extends Item {
 	@Override
 	public boolean hasGlint(ItemStack stack) {
 		return getIsTransCharged(stack) || super.hasGlint(stack); // TODO: see if this color can be changed, maybe scrap it entirely and just change item model instead
+	}
+
+	@Override
+	public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
+		super.appendTooltip(stack, world, tooltip, context);
+		if(!context.isAdvanced()) {
+			if (getIsTransCharged(stack)) {
+				tooltip.add(Text.translatable("item.soul_under_sculk.trans_ready").formatted(Formatting.AQUA));
+			} else {
+				tooltip.add(Text.translatable("item.soul_under_sculk.trans_not_ready").formatted(Formatting.YELLOW));
+			}
+		} else {
+			if (getIsTransCharged(stack)) {
+				tooltip.add(Text.translatable("item.soul_under_sculk.trans_ready_debug", getTransCharge(stack)).formatted(Formatting.AQUA));
+			} else {
+				tooltip.add(Text.translatable("item.soul_under_sculk.trans_not_ready_debug", getTransCharge(stack)).formatted(Formatting.YELLOW));
+			}
+			tooltip.add(Text.translatable("item.soul_under_sculk.charge", getCharge(stack), getMaxCharge(stack)).formatted(Formatting.GREEN));
+		}
 	}
 
 	public static int getCharge(ItemStack stack) {
