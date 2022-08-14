@@ -8,7 +8,7 @@ import phanastrae.soul_under_sculk.SoulUnderSculk;
 import phanastrae.soul_under_sculk.block.ModBlocks;
 
 public class ModItems {
-	public static final Item VERUM = new Item(getSettings().maxCount(1));
+	public static final VerumItem VERUM = new VerumItem(getSettings().maxCount(1));
 	public static final Item SCULK_VENT = new BlockItem(ModBlocks.SCULK_VENT, getSettings());
 
 	public static QuiltItemSettings getSettings() {
