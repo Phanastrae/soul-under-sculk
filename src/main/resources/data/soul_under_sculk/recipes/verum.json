@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": {
+      "item": "minecraft:sculk_catalyst"
+    },
+    "E": {
+      "item": "minecraft:echo_shard"
+    },
+    "R": {
+      "item": "minecraft:respawn_anchor"
+    },
+    "S": {
+      "item": "minecraft:sculk_sensor"
+    },
+    "N": {
+      "item": "minecraft:ender_eye"
+    },
+    "T": {
+      "item": "minecraft:ghast_tear"
+    }
+  },
+  "pattern": [
+    " SN",
+    "RCT",
+    " EE"
+  ],
+  "result": {
+    "item": "soul_under_sculk:verum"
+  }
+}

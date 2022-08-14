@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "T": {
+      "item": "minecraft:iron_trapdoor"
+    },
+    "S": {
+      "item": "minecraft:sculk"
+    },
+    "O": {
+      "item": "minecraft:obsidian"
+    },
+    "C": {
+      "item": "minecraft:crying_obsidian"
+    },
+    "P": {
+      "item": "minecraft:ender_pearl"
+    }
+  },
+  "pattern": [
+    "STS",
+    "OPO",
+    "SCS"
+  ],
+  "result": {
+    "item": "soul_under_sculk:sculk_vent"
+  }
+}
