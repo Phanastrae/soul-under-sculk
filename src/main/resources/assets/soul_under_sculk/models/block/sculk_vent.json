@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "soul_under_sculk:block/sculk_vent"
+  }
+}

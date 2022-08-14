@@ -11,6 +11,6 @@ import phanastrae.soul_under_sculk.SoulUnderSculk;
 public class TitleScreenMixin {
 	@Inject(method = "init", at = @At("TAIL"))
 	public void onInit(CallbackInfo ci) {
-		SoulUnderSculk.LOGGER.info("This line is printed by an example mod mixin!");
+		SoulUnderSculk.LOGGER.info("The Soul Under Sculk dev left this in by accident!");
 	}
 }
