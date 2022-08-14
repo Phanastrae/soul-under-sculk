@@ -5,11 +5,15 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUsageContext;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Rarity;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
+import phanastrae.soul_under_sculk.block.CreativeVerumChargerBlock;
+import phanastrae.soul_under_sculk.block.ModBlocks;
 
 public class VerumItem extends Item {
 	public VerumItem(Settings settings) {
@@ -30,6 +34,15 @@ public class VerumItem extends Item {
 			return TypedActionResult.success(stack);
 		}
 		return TypedActionResult.fail(stack);
+	}
+
+	@Override
+	public ActionResult useOnBlock(ItemUsageContext context) {
+		if(context.getWorld().getBlockState(context.getBlockPos()).getBlock() instanceof CreativeVerumChargerBlock) {
+			setCharge(context.getStack(), getMaxCharge(context.getStack()));
+			return ActionResult.SUCCESS;
+		}
+		return ActionResult.PASS;
 	}
 
 	public static boolean transformPlayer(ItemStack stack, PlayerEntity player) {
