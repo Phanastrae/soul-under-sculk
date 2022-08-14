@@ -2,13 +2,14 @@ package phanastrae.soul_under_sculk.item;
 
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.util.Rarity;
 import net.minecraft.util.registry.Registry;
 import org.quiltmc.qsl.item.setting.api.QuiltItemSettings;
 import phanastrae.soul_under_sculk.SoulUnderSculk;
 import phanastrae.soul_under_sculk.block.ModBlocks;
 
 public class ModItems {
-	public static final VerumItem VERUM = new VerumItem(getSettings().maxCount(1));
+	public static final VerumItem VERUM = new VerumItem(getSettings().maxCount(1).rarity(Rarity.UNCOMMON));
 	public static final Item SCULK_VENT = new BlockItem(ModBlocks.SCULK_VENT, getSettings());
 
 	public static QuiltItemSettings getSettings() {
