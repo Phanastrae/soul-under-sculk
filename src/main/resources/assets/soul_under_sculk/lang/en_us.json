@@ -6,9 +6,9 @@
 
   "itemGroup.soul_under_sculk.general": "Soul Under Sculk",
 
-  "item.soul_under_sculk.trans_ready": "Ready to Transform...",
-  "item.soul_under_sculk.trans_not_ready": "Not Enough Experience to Transform!",
-  "item.soul_under_sculk.trans_ready_debug": "Ready to Transform... (Cost: %s)",
-  "item.soul_under_sculk.trans_not_ready_debug": "Not Enough Experience to Transform! (Cost: %s)",
+  "item.soul_under_sculk.trans_ready": "Ready to Scroulkkothicate...",
+  "item.soul_under_sculk.trans_not_ready": "Not Enough Experience to Scroulkkothicate!",
+  "item.soul_under_sculk.trans_ready_debug": "Ready to Scroulkkothicate... (Cost: %s)",
+  "item.soul_under_sculk.trans_not_ready_debug": "Not Enough Experience to Scroulkkothicate! (Cost: %s)",
   "item.soul_under_sculk.charge": "Charge: %s / %s"
 }
