@@ -11,7 +11,7 @@ import phanastrae.soul_under_sculk.block.ModBlocks;
 public class ModItems {
 	public static final VerumItem VERUM = new VerumItem(getSettings().maxCount(1).rarity(Rarity.UNCOMMON));
 	public static final Item SCULK_VENT = new BlockItem(ModBlocks.SCULK_VENT, getSettings());
-	public static final Item CREATIVE_VERUM_CHARGER = new BlockItem(ModBlocks.CREATIVE_VERUM_CHARGER, getSettings());
+	public static final Item CREATIVE_VERUM_CHARGER = new BlockItem(ModBlocks.CREATIVE_VERUM_CHARGER, getSettings().rarity(Rarity.EPIC));
 
 	public static QuiltItemSettings getSettings() {
 		return new QuiltItemSettings().group(SoulUnderSculk.ITEM_GROUP);
