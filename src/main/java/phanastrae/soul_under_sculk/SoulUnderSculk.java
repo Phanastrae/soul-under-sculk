@@ -15,7 +15,7 @@ public class SoulUnderSculk implements ModInitializer {
 
 	public static String MOD_ID = "soul_under_sculk";
 
-	public static ItemGroup ITEM_GROUP = QuiltItemGroup.builder(id("general")).icon(() -> new ItemStack(ModItems.VERUM)).build();
+	public static ItemGroup ITEM_GROUP = QuiltItemGroup.builder(id("general")).icon(() -> new ItemStack(ModItems.SCULK_VENT)).build();
 
 	// This logger is used to write text to the console and the log file.
 	// It is considered best practice to use your mod name as the logger's name.
