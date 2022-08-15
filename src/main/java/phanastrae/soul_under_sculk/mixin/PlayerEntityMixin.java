@@ -24,15 +24,13 @@ public class PlayerEntityMixin implements PlayerEntityExtension {
 		this.transHandler = new TransformationHandler((PlayerEntity)(Object)this);
 	}
 
-	/*
-	@Inject(method = "writeCustomDataToNbt", at = @At("HEAD"))
+	@Inject(method = "writeCustomDataToNbt", at = @At("TAIL"))
 	public void SoulUnderSculk_writeCustomDataToNbt(NbtCompound nbt, CallbackInfo ci) {
-		SoulUnderSculk.LOGGER.info("Wrote nbt");
+		this.transHandler.writeNbt(nbt);
 	}
 
-	@Inject(at = @At("HEAD"), method = "readCustomDataFromNbt")
+	@Inject(method = "readCustomDataFromNbt", at = @At("TAIL"))
 	public void SoulUnderSculk_readCustomDataFromNbt(NbtCompound nbt, CallbackInfo ci) {
-		SoulUnderSculk.LOGGER.info("Read nbt");
+		this.transHandler.readNbt(nbt);
 	}
-	*/
 }
