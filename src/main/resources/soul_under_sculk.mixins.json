@@ -4,7 +4,9 @@
 	"package": "phanastrae.soul_under_sculk.mixin",
 	"compatibilityLevel": "JAVA_17",
 	"mixins": [
-      "XPOrbRepairGearMixin"
+      "XPOrbRepairGearMixin",
+      "PlayerEntityMixin",
+      "ArgumentTypeMixin"
     ],
 	"client": [
 	],

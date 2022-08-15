@@ -1,7 +1,6 @@
 package phanastrae.soul_under_sculk.item;
 
 import net.minecraft.client.item.TooltipContext;
-import net.minecraft.client.item.TooltipData;
 import net.minecraft.entity.ExperienceOrbEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
@@ -14,10 +13,12 @@ import net.minecraft.util.*;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import phanastrae.soul_under_sculk.block.CreativeVerumChargerBlock;
-import phanastrae.soul_under_sculk.block.ModBlocks;
+import phanastrae.soul_under_sculk.transformation.ModTransformations;
+import phanastrae.soul_under_sculk.transformation.TransformationType;
+import phanastrae.soul_under_sculk.util.PlayerEntityExtension;
+import phanastrae.soul_under_sculk.transformation.TransformationHandler;
 
 import java.util.List;
-import java.util.Optional;
 
 public class VerumItem extends Item {
 	public VerumItem(Settings settings) {
@@ -28,12 +29,14 @@ public class VerumItem extends Item {
 	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
 		ItemStack stack = user.getStackInHand(hand);
 		if(stack.getItem() instanceof VerumItem) {
-			if(getIsTransCharged(stack)) {
-				transformPlayer(stack, user);
-				user.getItemCooldownManager().set(this, 20);
-			} else {
-				yoinkXp(user, 5);
-				user.getItemCooldownManager().set(this, 20);
+			if(world instanceof ServerWorld) {
+				if (getIsTransCharged(stack)) {
+					transformPlayer(stack, user);
+					user.getItemCooldownManager().set(this, 20);
+				} else {
+					yoinkXp(user, 5);
+					user.getItemCooldownManager().set(this, 20);
+				}
 			}
 			return TypedActionResult.success(stack);
 		}
@@ -53,7 +56,15 @@ public class VerumItem extends Item {
 		if (!getIsTransCharged(stack)) return false;
 
 		addCharge(stack, -getTransCharge(stack));
-		player.kill();
+
+		TransformationHandler transHandler = ((PlayerEntityExtension)player).getTransHandler();
+		TransformationType transType = transHandler.getTransformation();
+		if(transType == ModTransformations.SCULKMATE) {
+			transHandler.setTransformation(null);
+		} else {
+			transHandler.setTransformation(ModTransformations.SCULKMATE);
+		}
+		// TODO: add Egg stage
 		return true;
 	}
 
@@ -113,13 +124,13 @@ public class VerumItem extends Item {
 			if (getIsTransCharged(stack)) {
 				tooltip.add(Text.translatable("item.soul_under_sculk.trans_ready").formatted(Formatting.AQUA));
 			} else {
-				tooltip.add(Text.translatable("item.soul_under_sculk.trans_not_ready").formatted(Formatting.YELLOW));
+				tooltip.add(Text.translatable("item.soul_under_sculk.trans_not_ready").formatted(Formatting.WHITE));
 			}
 		} else {
 			if (getIsTransCharged(stack)) {
 				tooltip.add(Text.translatable("item.soul_under_sculk.trans_ready_debug", getTransCharge(stack)).formatted(Formatting.AQUA));
 			} else {
-				tooltip.add(Text.translatable("item.soul_under_sculk.trans_not_ready_debug", getTransCharge(stack)).formatted(Formatting.YELLOW));
+				tooltip.add(Text.translatable("item.soul_under_sculk.trans_not_ready_debug", getTransCharge(stack)).formatted(Formatting.WHITE));
 			}
 			tooltip.add(Text.translatable("item.soul_under_sculk.charge", getCharge(stack), getMaxCharge(stack)).formatted(Formatting.GREEN));
 		}

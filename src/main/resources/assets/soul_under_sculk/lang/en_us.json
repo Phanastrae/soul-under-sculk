@@ -10,5 +10,18 @@
   "item.soul_under_sculk.trans_not_ready": "Not Enough Experience to Scroulkkothicate!",
   "item.soul_under_sculk.trans_ready_debug": "Ready to Scroulkkothicate... (Cost: %s)",
   "item.soul_under_sculk.trans_not_ready_debug": "Not Enough Experience to Scroulkkothicate! (Cost: %s)",
-  "item.soul_under_sculk.charge": "Charge: %s / %s"
+  "item.soul_under_sculk.charge": "Charge: %s / %s",
+
+  "commands.soul_under_sculk.transform.list.header": "Found %s Entries:",
+  "commands.soul_under_sculk.transform.list.element": " - %s (%s)",
+  "commands.soul_under_sculk.transform.query.hastransform": "%s is a '%s'.",
+  "commands.soul_under_sculk.transform.query.notransform": "%s has no transformation.",
+  "commands.soul_under_sculk.transform.set.yty": "Set %s' transformation to %s (from %s)",
+  "commands.soul_under_sculk.transform.set.ytn": "Set %s' transformation to %s (from none)",
+  "commands.soul_under_sculk.transform.set.nty": "Set %s' transformation to none (from %s)",
+
+  "argument.soul_under_sculk.transformation.id.invalid": "Unknown transformation type '%s'",
+
+  "soul_under_sculk.transformation.soul_under_sculk.sculkmate": "Scroulkkoth",
+  "soul_under_sculk.transformation.soul_under_sculk.egg": "Scroulkkoth Chrwysalus"
 }

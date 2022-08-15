@@ -10,7 +10,7 @@ import phanastrae.soul_under_sculk.SoulUnderSculk;
 
 public class ModBlocks {
 	public static final Block SCULK_VENT = new SculkVentBlock(QuiltBlockSettings.of(Material.SCULK).strength(0.2F).sounds(BlockSoundGroup.SCULK));
-	public static final Block CREATIVE_VERUM_CHARGER = new CreativeVerumChargerBlock(QuiltBlockSettings.of(Material.SCULK).strength(-1.0F, 3600000.0F).dropsNothing().allowsSpawning((a, b, c, d) -> false).luminance(15));
+	public static final Block CREATIVE_VERUM_CHARGER = new CreativeVerumChargerBlock(QuiltBlockSettings.of(Material.SCULK).sounds(BlockSoundGroup.GLASS).strength(-1.0F, 3600000.0F).dropsNothing().allowsSpawning((a, b, c, d) -> false).luminance(15));
 
 	public static void init() {
 		register(SCULK_VENT, "sculk_vent");
