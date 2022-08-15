@@ -16,9 +16,9 @@
   "commands.soul_under_sculk.transform.list.element": " - %s (%s)",
   "commands.soul_under_sculk.transform.query.hastransform": "%s is a '%s'.",
   "commands.soul_under_sculk.transform.query.notransform": "%s has no transformation.",
-  "commands.soul_under_sculk.transform.set.yty": "Set %s' transformation to %s (from %s)",
-  "commands.soul_under_sculk.transform.set.ytn": "Set %s' transformation to %s (from none)",
-  "commands.soul_under_sculk.transform.set.nty": "Set %s' transformation to none (from %s)",
+  "commands.soul_under_sculk.transform.set.yty": "Set %s's transformation to %s (from %s)",
+  "commands.soul_under_sculk.transform.set.ytn": "Set %s's transformation to %s (from none)",
+  "commands.soul_under_sculk.transform.set.nty": "Set %s's transformation to none (from %s)",
 
   "argument.soul_under_sculk.transformation.id.invalid": "Unknown transformation type '%s'",
 
