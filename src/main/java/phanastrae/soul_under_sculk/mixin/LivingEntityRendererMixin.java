@@ -1,7 +1,5 @@
 package phanastrae.soul_under_sculk.mixin;
 
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
@@ -10,12 +8,14 @@ import net.minecraft.client.render.entity.model.*;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import phanastrae.soul_under_sculk.SoulUnderSculk;
 import phanastrae.soul_under_sculk.SoulUnderSculkClient;
 import phanastrae.soul_under_sculk.render.SculkmateEntityModel;
 import phanastrae.soul_under_sculk.transformation.TransformationHandler;
@@ -48,9 +48,22 @@ public abstract class LivingEntityRendererMixin <T extends LivingEntity, M exten
 		}
 	}
 
+	@ModifyVariable(method = "getRenderLayer", at = @At("STORE"))
+	protected Identifier SoulUnderSculk_getRenderLayer(Identifier identifier, T entity, boolean showBody, boolean translucent, boolean showOutline) {
+		if(!(entity instanceof TransformableEntity)) return identifier;
+		if(!(entity instanceof PlayerEntity)) return identifier;
+		TransformationHandler transHandler = ((TransformableEntity) entity).getTransHandler();
+		if(transHandler == null) return identifier;
+		if(!transHandler.isTransformed()) return identifier;
+		return SoulUnderSculk.id("textures/entity/sculkmate/sculkmate.png");
+	}
+
+	/*
 	//TODO: is redirect bad?
 	@Redirect(method = "render(Lnet/minecraft/entity/LivingEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/model/EntityModel;render(Lnet/minecraft/client/util/math/MatrixStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;IIFFFF)V"))
 	protected void SoulUnderSculk_render_color(M model, MatrixStack matrixStack, VertexConsumer vertexConsumer, int i, int p, float r, float g, float b, float a) {
 		model.render(matrixStack, vertexConsumer, i, p, r, g, b, a);
 	}
+
+	 */
 }
