@@ -1,7 +1,6 @@
 package phanastrae.soul_under_sculk.item;
 
 import net.minecraft.client.item.TooltipContext;
-import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.ExperienceOrbEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
@@ -13,7 +12,6 @@ import net.minecraft.text.Text;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-import phanastrae.soul_under_sculk.SoulUnderSculk;
 import phanastrae.soul_under_sculk.block.CreativeVerumChargerBlock;
 import phanastrae.soul_under_sculk.transformation.ModTransformations;
 import phanastrae.soul_under_sculk.transformation.TransformationType;

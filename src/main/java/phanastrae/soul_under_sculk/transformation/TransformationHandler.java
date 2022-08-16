@@ -2,18 +2,14 @@ package phanastrae.soul_under_sculk.transformation;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
-import org.quiltmc.qsl.networking.api.PacketByteBufs;
-import org.quiltmc.qsl.networking.api.ServerPlayNetworking;
 import phanastrae.soul_under_sculk.SoulUnderSculk;
-import phanastrae.soul_under_sculk.packets.ModPackets;
 
 public class TransformationHandler {
 
 	private boolean shouldSyncData = false;
+	private boolean shouldClientReloadModel = false;
 
 	public PlayerEntity player;
 	public TransformationType transformationType;
@@ -30,6 +26,8 @@ public class TransformationHandler {
 
 			if(player.world instanceof ServerWorld) {
 				setShouldSyncData(true);
+			} else {
+				setShouldClientReloadModel(true);
 			}
 		}
 	}
@@ -62,5 +60,13 @@ public class TransformationHandler {
 
 	public boolean shouldSyncData() {
 		return shouldSyncData;
+	}
+
+	public void setShouldClientReloadModel(boolean b) {
+		shouldClientReloadModel = b;
+	}
+
+	public boolean shouldClientReloadModel() {
+		return shouldClientReloadModel;
 	}
 }

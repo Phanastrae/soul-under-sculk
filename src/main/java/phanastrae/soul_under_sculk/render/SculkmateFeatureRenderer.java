@@ -19,6 +19,7 @@ import net.minecraft.util.math.Matrix3f;
 import net.minecraft.util.math.Matrix4f;
 import net.minecraft.util.math.Vec3f;
 import net.minecraft.util.random.RandomGenerator;
+import phanastrae.soul_under_sculk.SoulUnderSculk;
 import phanastrae.soul_under_sculk.util.TransformableEntity;
 
 @Environment(EnvType.CLIENT)
@@ -27,37 +28,33 @@ public class SculkmateFeatureRenderer extends FeatureRenderer<AbstractClientPlay
 		super(featureRendererContext);
 	}
 
-	private static final Identifier TEXTURE = new Identifier("textures/entity/bee/bee_stinger.png");
+	private static final Identifier TEXTURE = SoulUnderSculk.id("textures/entity/sculkmate/sculkmate.png");
 
 	@Override
 	public void render(MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int light, AbstractClientPlayerEntity livingEntity, float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch) {
-		if(livingEntity instanceof TransformableEntity) {
-			if(((TransformableEntity)livingEntity).getTransHandler().transformationType != null) {
-
-
-
-
-				RandomGenerator randomGenerator = RandomGenerator.createLegacy((long) livingEntity.getId());
-				for (int n = 0; n < 420; ++n) {
-					matrixStack.push();
-					ModelPart modelPart = this.getContextModel().getRandomPart(randomGenerator);
-					ModelPart.Cuboid cuboid = modelPart.getRandomCuboid(randomGenerator);
-					modelPart.rotate(matrixStack);
-					float o = randomGenerator.nextFloat();
-					float p = randomGenerator.nextFloat();
-					float q = randomGenerator.nextFloat();
-					float r = MathHelper.lerp(o, cuboid.minX, cuboid.maxX) / 16.0F;
-					float s = MathHelper.lerp(p, cuboid.minY, cuboid.maxY) / 16.0F;
-					float t = MathHelper.lerp(q, cuboid.minZ, cuboid.maxZ) / 16.0F;
-					matrixStack.translate((double) r, (double) s, (double) t);
-					o = -1.0F * (o * 2.0F - 1.0F);
-					p = -1.0F * (p * 2.0F - 1.0F);
-					q = -1.0F * (q * 2.0F - 1.0F);
-					this.renderObject(matrixStack, vertexConsumerProvider, light, livingEntity, o, p, q, tickDelta);
-					matrixStack.pop();
-				}
-			}
+		/*
+		if(!(livingEntity instanceof TransformableEntity)) return;
+		if(!((TransformableEntity)livingEntity).getTransHandler().isTransformed()) return;
+		RandomGenerator randomGenerator = RandomGenerator.createLegacy((long) livingEntity.getId());
+		for (int n = 0; n < 420; ++n) {
+			matrixStack.push();
+			ModelPart modelPart = this.getContextModel().getRandomPart(randomGenerator);
+			ModelPart.Cuboid cuboid = modelPart.getRandomCuboid(randomGenerator);
+			modelPart.rotate(matrixStack);
+			float o = randomGenerator.nextFloat();
+			float p = randomGenerator.nextFloat();
+			float q = randomGenerator.nextFloat();
+			float r = MathHelper.lerp(o, cuboid.minX, cuboid.maxX) / 16.0F;
+			float s = MathHelper.lerp(p, cuboid.minY, cuboid.maxY) / 16.0F;
+			float t = MathHelper.lerp(q, cuboid.minZ, cuboid.maxZ) / 16.0F;
+			matrixStack.translate((double) r, (double) s, (double) t);
+			o = -1.0F * (o * 2.0F - 1.0F);
+			p = -1.0F * (p * 2.0F - 1.0F);
+			q = -1.0F * (q * 2.0F - 1.0F);
+			this.renderObject(matrixStack, vertexConsumerProvider, light, livingEntity, o, p, q, tickDelta);
+			matrixStack.pop();
 		}
+		*/
 	}
 
 	protected void renderObject(
