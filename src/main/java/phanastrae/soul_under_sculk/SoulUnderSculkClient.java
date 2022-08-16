@@ -9,6 +9,7 @@ import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.qsl.base.api.entrypoint.client.ClientModInitializer;
 import phanastrae.soul_under_sculk.packets.ModPackets;
 import phanastrae.soul_under_sculk.render.SculkmateEntityModel;
+import phanastrae.soul_under_sculk.render.SculkmateFeatureRenderer;
 
 public class SoulUnderSculkClient implements ClientModInitializer {
 	public static final EntityModelLayer MODEL_SCULKMATE_LAYER = new EntityModelLayer(SoulUnderSculk.id("sculkmate"), "main");
@@ -19,7 +20,7 @@ public class SoulUnderSculkClient implements ClientModInitializer {
 
 
 		EntityModelLayerRegistry.registerModelLayer(MODEL_SCULKMATE_LAYER,
-				() -> TexturedModelData.of(SculkmateEntityModel.getTexturedModelData(Dilation.NONE, true), 64, 64));
+				() -> TexturedModelData.of(SculkmateEntityModel.getTexturedModelData(Dilation.NONE, true), SculkmateFeatureRenderer.TEXTURE_WIDTH, SculkmateFeatureRenderer.TEXTURE_HEIGHT));
 	}
 
 

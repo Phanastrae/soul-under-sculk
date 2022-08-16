@@ -30,7 +30,9 @@ public class SculkmateFeatureRenderer extends FeatureRenderer<AbstractClientPlay
 		this.model = mp == null ? null : new SculkmateEntityModel<>(mp, false);
 	}
 
-	private static final Identifier TEXTURE = SoulUnderSculk.id("textures/entity/sculkmate/sculkmate.png");
+	public static final Identifier TEXTURE = SoulUnderSculk.id("textures/entity/sculkmate/sculkmate.png");
+	public static final int TEXTURE_WIDTH = 128;
+	public static final int TEXTURE_HEIGHT = 128;
 
 	@Override
 	public void render(MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int light, AbstractClientPlayerEntity livingEntity, float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch) {
