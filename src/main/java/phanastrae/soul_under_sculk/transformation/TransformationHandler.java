@@ -2,10 +2,18 @@ package phanastrae.soul_under_sculk.transformation;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
+import org.quiltmc.qsl.networking.api.PacketByteBufs;
+import org.quiltmc.qsl.networking.api.ServerPlayNetworking;
 import phanastrae.soul_under_sculk.SoulUnderSculk;
+import phanastrae.soul_under_sculk.packets.ModPackets;
 
 public class TransformationHandler {
+
+	private boolean shouldSyncData = false;
 
 	public PlayerEntity player;
 	public TransformationType transformationType;
@@ -16,17 +24,22 @@ public class TransformationHandler {
 
 	public void setTransformation(TransformationType type) {
 		if(player == null) return;
-		this.transformationType = type;
 
-		if(type != null) {
-			SoulUnderSculk.LOGGER.info("Set " + player.getEntityName() + " to " + type.getRegistryId() + "!");
-		} else {
-			SoulUnderSculk.LOGGER.info("Cleared " + player.getEntityName() + "'s transformation!");
+		if(this.transformationType != type) {
+			this.transformationType = type;
+
+			if(player.world instanceof ServerWorld) {
+				setShouldSyncData(true);
+			}
 		}
 	}
 
 	public TransformationType getTransformation() {
 		return this.transformationType;
+	}
+
+	public boolean isTransformed() {
+		return getTransformation() != null;
 	}
 
 	public void readNbt(NbtCompound nbt) {
@@ -38,8 +51,16 @@ public class TransformationHandler {
 	public void writeNbt(NbtCompound nbt) {
 		NbtCompound susNbt = new NbtCompound();
 
-		susNbt.putString("Transformation", (this.transformationType == null) ? null : this.transformationType.getRegistryId().toString());
+		susNbt.putString("Transformation", (this.transformationType == null) ? "" : this.transformationType.getRegistryId().toString());
 
 		nbt.put("SoulUnderSculk", susNbt);
+	}
+
+	public void setShouldSyncData(boolean b) {
+		shouldSyncData = b;
+	}
+
+	public boolean shouldSyncData() {
+		return shouldSyncData;
 	}
 }

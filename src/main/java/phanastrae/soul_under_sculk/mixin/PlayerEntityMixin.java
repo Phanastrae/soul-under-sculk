@@ -7,10 +7,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import phanastrae.soul_under_sculk.transformation.TransformationHandler;
-import phanastrae.soul_under_sculk.util.PlayerEntityExtension;
+import phanastrae.soul_under_sculk.util.TransformableEntity;
 
 @Mixin(PlayerEntity.class)
-public class PlayerEntityMixin implements PlayerEntityExtension {
+public class PlayerEntityMixin implements TransformableEntity {
 
 	public TransformationHandler transHandler;
 
@@ -19,7 +19,7 @@ public class PlayerEntityMixin implements PlayerEntityExtension {
 		return transHandler;
 	}
 
-	@Inject(method = "<init>*", at = @At("RETURN"))
+	@Inject(method = "<init>*", at = @At("TAIL"))
 	public void SoulUnderSculk_playerEntity(CallbackInfo ci) {
 		this.transHandler = new TransformationHandler((PlayerEntity)(Object)this);
 	}

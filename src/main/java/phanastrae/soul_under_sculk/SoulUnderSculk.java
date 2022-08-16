@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import phanastrae.soul_under_sculk.block.ModBlocks;
 import phanastrae.soul_under_sculk.command.SUSCommand;
 import phanastrae.soul_under_sculk.item.ModItems;
+import phanastrae.soul_under_sculk.packets.ModPackets;
 import phanastrae.soul_under_sculk.transformation.ModTransformations;
 import phanastrae.soul_under_sculk.transformation.TransformationType;
 
@@ -35,9 +36,12 @@ public class SoulUnderSculk implements ModInitializer {
 
 		ModTransformations.init();
 
+		ModPackets.init();
+
 		CommandRegistrationCallback.EVENT.register(((dispatcher, buildContext, environment) -> {
 			SUSCommand.register(dispatcher, buildContext);
 		}));
+		
 	}
 
 	public static Identifier id(String name) {

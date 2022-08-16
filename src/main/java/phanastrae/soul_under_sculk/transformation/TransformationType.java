@@ -9,6 +9,8 @@ import phanastrae.soul_under_sculk.SoulUnderSculk;
 
 public abstract class TransformationType {
 
+	public static final Identifier ID_NO_TRANSFORMATION = SoulUnderSculk.id("none");
+
 	@Nullable
 	private String translationKey;
 
@@ -27,4 +29,8 @@ public abstract class TransformationType {
 
 		return this.translationKey;
 	}
+
+	public abstract Identifier getIconId();
+
+	public abstract boolean shouldRenderIcon();
 }

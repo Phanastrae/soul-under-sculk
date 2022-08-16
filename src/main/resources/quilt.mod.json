@@ -15,7 +15,8 @@
 		},
 		"intermediate_mappings": "net.fabricmc:intermediary",
 		"entrypoints": {
-			"init": "phanastrae.soul_under_sculk.SoulUnderSculk"
+			"init": "phanastrae.soul_under_sculk.SoulUnderSculk",
+			"client_init": "phanastrae.soul_under_sculk.SoulUnderSculkClient"
 		},
 		"depends": [
 			{

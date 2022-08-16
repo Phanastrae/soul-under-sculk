@@ -10,7 +10,7 @@ import phanastrae.soul_under_sculk.item.ModItems;
 import phanastrae.soul_under_sculk.item.VerumItem;
 
 @Mixin(ExperienceOrbEntity.class)
-public class XPOrbRepairGearMixin {
+public class XPOrbRepairGearMixin { // TODO: check if this accidentally overmends stuff, then decide if i actually care
 	@ModifyVariable(method = "repairPlayerGears", at = @At("HEAD"))
 	public int SoulUnderSculk_repairPlayerGears(int amount, PlayerEntity player) {
 		for(ItemStack stack : player.getItemsHand()) {

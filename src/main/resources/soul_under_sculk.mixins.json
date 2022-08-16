@@ -6,9 +6,13 @@
 	"mixins": [
       "XPOrbRepairGearMixin",
       "PlayerEntityMixin",
-      "ArgumentTypeMixin"
+      "ArgumentTypeMixin",
+      "EntityTrackerMixin",
+      "PlayerManagerMixin"
     ],
 	"client": [
+      "PlayerEntityRendererMixin",
+      "InGameHudMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
