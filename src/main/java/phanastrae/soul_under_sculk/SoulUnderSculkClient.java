@@ -16,6 +16,8 @@ public class SoulUnderSculkClient implements ClientModInitializer {
     @Override
 	public void onInitializeClient(ModContainer mod) {
 		ModPackets.init();
+
+
 		EntityModelLayerRegistry.registerModelLayer(MODEL_SCULKMATE_LAYER,
 				() -> TexturedModelData.of(SculkmateEntityModel.getTexturedModelData(Dilation.NONE, true), 64, 64));
 	}

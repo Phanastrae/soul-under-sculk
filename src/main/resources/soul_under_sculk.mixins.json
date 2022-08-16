@@ -11,10 +11,10 @@
       "PlayerManagerMixin"
     ],
 	"client": [
+      "InGameHudMixin",
       "PlayerEntityRendererMixin",
-      "LivingEntityRendererMixin",
-      "InGameHudMixin"
-	],
+      "PlayerEntityModelMixin"
+    ],
 	"injectors": {
 		"defaultRequire": 1
 	}

@@ -26,13 +26,7 @@ public class PlayerEntityRendererMixin extends LivingEntityRenderer {
 
 	@Inject(method = "<init>*", at = @At("TAIL"))
 	public void SoulUnderSculk_init(EntityRendererFactory.Context context, boolean bl, CallbackInfo ci) {
-		this.addFeature(new SculkmateFeatureRenderer((FeatureRendererContext<AbstractClientPlayerEntity, PlayerEntityModel<AbstractClientPlayerEntity>>) this));
-	}
-
-	@Inject(method = "render", at = @At("HEAD"))
-	public void SoulUnderSculk_render(
-			AbstractClientPlayerEntity abstractClientPlayerEntity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, CallbackInfo ci
-	) {
+		this.addFeature(new SculkmateFeatureRenderer((FeatureRendererContext<AbstractClientPlayerEntity, PlayerEntityModel<AbstractClientPlayerEntity>>) this, context.getModelLoader()));
 	}
 
 	//just here so i can extend LivingEntityRenderer
