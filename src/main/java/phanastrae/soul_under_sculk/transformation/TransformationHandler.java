@@ -29,6 +29,8 @@ public class TransformationHandler {
 			} else {
 				setShouldClientReloadModel(true);
 			}
+
+			player.calculateDimensions();
 		}
 	}
 
@@ -44,6 +46,7 @@ public class TransformationHandler {
 		NbtCompound susNbt = nbt.getCompound("SoulUnderSculk");
 
 		this.transformationType = SoulUnderSculk.TRANSFORMATIONS.get(new Identifier(susNbt.getString("Transformation")));
+		player.calculateDimensions();
 	}
 
 	public void writeNbt(NbtCompound nbt) {
