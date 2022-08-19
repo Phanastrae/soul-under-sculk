@@ -23,7 +23,7 @@ import phanastrae.soul_under_sculk.util.TransformableEntity;
 
 @Environment(EnvType.CLIENT)
 public class SculkmateFeatureRenderer extends FeatureRenderer<AbstractClientPlayerEntity, PlayerEntityModel<AbstractClientPlayerEntity>> {
-	private final SculkmateEntityModel<AbstractClientPlayerEntity> model;
+	public final SculkmateEntityModel<AbstractClientPlayerEntity> model;
 
 	public SculkmateFeatureRenderer(FeatureRendererContext<AbstractClientPlayerEntity, PlayerEntityModel<AbstractClientPlayerEntity>> featureRendererContext, EntityModelLoader entityModelLoader) {
 		super(featureRendererContext);
@@ -45,8 +45,8 @@ public class SculkmateFeatureRenderer extends FeatureRenderer<AbstractClientPlay
 		if(!transformationHandler.isTransformed()) return;
 
 		this.getContextModel().copyStateTo(this.model);
-		this.model.animateModel(livingEntity, limbAngle, limbDistance, tickDelta);
-		this.model.setAngles(livingEntity, limbAngle, limbDistance, animationProgress, headYaw, headPitch);
+		//this.model.animateModel(livingEntity, limbAngle, limbDistance, tickDelta);
+		//this.model.setAngles(livingEntity, limbAngle, limbDistance, animationProgress, headYaw, headPitch);
 		int overlay = LivingEntityRenderer.getOverlay(livingEntity, 0.0F);
 
 		VertexConsumer vertexConsumer = vertexConsumerProvider.getBuffer(RenderLayer.getEntityCutoutNoCull(SCULKMATE));

@@ -32,7 +32,6 @@ public class PlayerEntityModelMixin<T extends LivingEntity> extends BipedEntityM
 		for(ModelPart part : this.parts) {
 			part.visible = false;
 		}
-		//TODO: try to resize model parts to make elytra, arrows, etc. actually match?
 	}
 
 	@Shadow private final List<ModelPart> parts;

@@ -5,6 +5,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import phanastrae.soul_under_sculk.SoulUnderSculk;
+import phanastrae.soul_under_sculk.util.TransformableEntity;
 
 public class TransformationHandler {
 
@@ -55,6 +56,12 @@ public class TransformationHandler {
 		susNbt.putString("Transformation", (this.transformationType == null) ? "" : this.transformationType.getRegistryId().toString());
 
 		nbt.put("SoulUnderSculk", susNbt);
+	}
+
+	public void loadFromOnDeath(TransformationHandler oldTransHandler, boolean alive) {
+		if(alive || false) { // TODO: Curse of Transcendence
+			this.setTransformation(oldTransHandler.transformationType);
+		}
 	}
 
 	public void setShouldSyncData(boolean b) {

@@ -19,14 +19,18 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import phanastrae.soul_under_sculk.render.PlayerEntityRendererExtension;
 import phanastrae.soul_under_sculk.render.SculkmateFeatureRenderer;
 
 @Mixin(PlayerEntityRenderer.class)
-public class PlayerEntityRendererMixin extends LivingEntityRenderer {
+public class PlayerEntityRendererMixin extends LivingEntityRenderer implements PlayerEntityRendererExtension {
+
+	private SculkmateFeatureRenderer sculkmateFeatureRenderer;
 
 	@Inject(method = "<init>*", at = @At("TAIL"))
 	public void SoulUnderSculk_init(EntityRendererFactory.Context context, boolean bl, CallbackInfo ci) {
-		this.addFeature(new SculkmateFeatureRenderer((FeatureRendererContext<AbstractClientPlayerEntity, PlayerEntityModel<AbstractClientPlayerEntity>>) this, context.getModelLoader()));
+		this.sculkmateFeatureRenderer = new SculkmateFeatureRenderer((FeatureRendererContext<AbstractClientPlayerEntity, PlayerEntityModel<AbstractClientPlayerEntity>>) this, context.getModelLoader());
+		this.addFeature(this.sculkmateFeatureRenderer);
 	}
 
 	//just here so i can extend LivingEntityRenderer
@@ -36,5 +40,10 @@ public class PlayerEntityRendererMixin extends LivingEntityRenderer {
 	}
 	public PlayerEntityRendererMixin(EntityRendererFactory.Context context, EntityModel entityModel, float f) {
 		super(context, entityModel, f);
+	}
+
+	@Override
+	public SculkmateFeatureRenderer getSculkmateFeatureRenderer() {
+		return this.sculkmateFeatureRenderer;
 	}
 }
