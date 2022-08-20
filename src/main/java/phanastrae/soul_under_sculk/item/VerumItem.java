@@ -1,21 +1,12 @@
 package phanastrae.soul_under_sculk.item;
 
-import com.google.common.collect.Multimap;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.item.TooltipContext;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.ExperienceOrbEntity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.damage.EntityDamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUsageContext;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -25,7 +16,6 @@ import net.minecraft.util.*;
 import net.minecraft.util.random.RandomGenerator;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-import phanastrae.soul_under_sculk.block.CreativeVerumChargerBlock;
 import phanastrae.soul_under_sculk.transformation.ModTransformations;
 import phanastrae.soul_under_sculk.transformation.TransformationType;
 import phanastrae.soul_under_sculk.util.TransformableEntity;
@@ -51,7 +41,7 @@ public class VerumItem extends Item {
 		PlayerEntity player = (PlayerEntity)user;
 		TransformationHandler transformationHandler = ((TransformableEntity)player).getTransHandler();
 		boolean isSculkmate = transformationHandler != null && ModTransformations.SCULKMATE.equals(transformationHandler.getTransformation());
-		if(world instanceof ServerWorld) {
+		if(!world.isClient) {
 			if(isSculkmate) {
 				transformPlayer(stack, player, false);
 				player.getItemCooldownManager().set(this, 60);
@@ -68,7 +58,7 @@ public class VerumItem extends Item {
 
 	@Override
 	public void usageTick(World world, LivingEntity user, ItemStack stack, int remainingUseTicks) {
-		if(world instanceof ClientWorld) {
+		if(world.isClient) {
 			if(getIsTransCharged(stack)) {
 				RandomGenerator randomGenerator = world.getRandom();
 				for (int i = 0; i < 8; i++) {
@@ -111,7 +101,7 @@ public class VerumItem extends Item {
 		}
 		// TODO: add Egg stage
 
-		if(player.getWorld() instanceof ServerWorld) {
+		if(!player.getWorld().isClient) {
 			player.getWorld().playSound(
 					null,
 					player.getX(),
@@ -149,7 +139,7 @@ public class VerumItem extends Item {
 	}
 
 	public static void yoinkXp(LivingEntity yoinker, PlayerEntity yoinkee, ItemStack stack, int levels) {
-		if(yoinkee.world instanceof ServerWorld) {
+		if(!yoinkee.world.isClient) {
 			boolean yoinkeeCreative = yoinkee.getAbilities().creativeMode;
 			int xpYoinked = 0;
 			if(!yoinkeeCreative) {
@@ -180,7 +170,7 @@ public class VerumItem extends Item {
 			amount -= xpConsumed;
 			boolean wasCharged = getIsTransCharged(stack);
 			addCharge(stack, xpConsumed);
-			if(player.getWorld() instanceof ServerWorld && getIsTransCharged(stack) && !wasCharged) {
+			if(!player.getWorld().isClient && getIsTransCharged(stack) && !wasCharged) {
 				player.getWorld().playSound(
 						null,
 						player.getX(),

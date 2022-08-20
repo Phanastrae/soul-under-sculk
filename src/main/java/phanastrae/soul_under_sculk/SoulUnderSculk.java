@@ -36,12 +36,10 @@ public class SoulUnderSculk implements ModInitializer {
 
 		ModTransformations.init();
 
-		ModPackets.init();
-
 		CommandRegistrationCallback.EVENT.register(((dispatcher, buildContext, environment) -> {
 			SUSCommand.register(dispatcher, buildContext);
 		}));
-		
+
 	}
 
 	public static Identifier id(String name) {

@@ -8,7 +8,6 @@ import phanastrae.soul_under_sculk.SoulUnderSculk;
 import phanastrae.soul_under_sculk.transformation.TransformationType;
 import phanastrae.soul_under_sculk.util.TransformableEntity;
 
-
 public class ModPackets {
 	public static Identifier ENTITY_TRANSFORM_PACKET_ID = SoulUnderSculk.id("entity_transform");
 

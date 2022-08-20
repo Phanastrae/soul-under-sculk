@@ -79,5 +79,4 @@ public class TransformationHandler {
 	public boolean shouldClientReloadModel() {
 		return shouldClientReloadModel;
 	}
-	// TODO: either properly implement or just remove this
 }

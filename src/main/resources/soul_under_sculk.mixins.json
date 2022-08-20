@@ -17,7 +17,10 @@
       "PlayerEntityModelMixin",
       "LivingEntityRendererMixin",
       "ClientPlayNetworkHandlerMixin",
-      "BipedEntityModelMixin"
+      "BipedEntityModelMixin",
+      "ElytraFeatureRendererMixin",
+      "FeatureRendererMixin",
+      "ElytraEntityModelMixin"
     ],
 	"injectors": {
 		"defaultRequire": 1
