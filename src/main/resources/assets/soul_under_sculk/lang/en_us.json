@@ -1,4 +1,6 @@
 {
+  "soul_under_sculk.not_yet_implemented":  "Not Yet Implemented",
+
   "item.soul_under_sculk.verum": "Scroulkkoth Verum",
 
   "block.soul_under_sculk.sculk_vent": "Sculk Vent",
@@ -28,5 +30,8 @@
   "soul_under_sculk.transformation.soul_under_sculk.egg": "Scroulkkoth Chrwysalus",
 
   "death.attack.soul_under_sculk.verum_siphon": "%1$s's life experience was siphoned by %2$s",
-  "death.attack.soul_under_sculk.verum_siphon.self": "%1$s tried to forget the experience"
+  "death.attack.soul_under_sculk.verum_siphon.self": "%1$s tried to forget the experience",
+
+  "advancements.soul_under_sculk.become_sculkmate.description": "Contort your Soul's Vessel and become a Scroulkkoth",
+  "advancements.soul_under_sculk.become_sculkmate.title": "When the Imposter is Sculk???"
 }

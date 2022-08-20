@@ -33,12 +33,14 @@ public class SUSCommand {
 																						executeSet(context, EntityArgumentType.getPlayers(context, "target"), TransformationArgumentType.getTransformation(context, "transformation"))
 																				)
 																)
-																.then(
-																		CommandManager.literal("none")
-																				.executes(context ->
-																						executeSet(context, EntityArgumentType.getPlayers(context, "target"), null)
-																				)
-																)
+												)
+								)
+								.then(
+										CommandManager.literal("clear")
+												.executes(context -> executeClear(context, Collections.singleton(context.getSource().getPlayer())))
+												.then(
+														CommandManager.argument("target", EntityArgumentType.players())
+																.executes(context -> executeClear(context, EntityArgumentType.getPlayers(context, "target")))
 												)
 								)
 								.then(
@@ -74,6 +76,21 @@ public class SUSCommand {
 				} else {
 					context.getSource().sendFeedback(Text.translatable("commands.soul_under_sculk.transform.set.ytn", serverPlayerEntity.getEntityName(), currentTransformation.getName()), true);
 				}
+			}
+		}
+
+		return i;
+	}
+
+	private static int executeClear(CommandContext<ServerCommandSource> context, Collection<ServerPlayerEntity> targets) {
+		int i = 0;
+
+		for(ServerPlayerEntity serverPlayerEntity : targets) {
+			TransformationHandler transHandler = ((TransformableEntity)(PlayerEntity)serverPlayerEntity).getTransHandler();
+			TransformationType currentTransformation = transHandler.getTransformation();
+			if(currentTransformation != null) {
+				transHandler.setTransformation(null);
+				context.getSource().sendFeedback(Text.translatable("commands.soul_under_sculk.transform.set.ytn", serverPlayerEntity.getEntityName(), currentTransformation.getName()), true);
 			}
 		}
 

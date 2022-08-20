@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import phanastrae.soul_under_sculk.block.ModBlocks;
 import phanastrae.soul_under_sculk.command.SUSCommand;
 import phanastrae.soul_under_sculk.item.ModItems;
+import phanastrae.soul_under_sculk.misc.ModAdvancements;
 import phanastrae.soul_under_sculk.packets.ModPackets;
 import phanastrae.soul_under_sculk.transformation.ModTransformations;
 import phanastrae.soul_under_sculk.transformation.TransformationType;
@@ -25,7 +26,7 @@ public class SoulUnderSculk implements ModInitializer {
 	public static FabricRegistryBuilder<TransformationType, SimpleRegistry<TransformationType>> registryBuilder = FabricRegistryBuilder.createSimple(TransformationType.class, id("transformation"));
 	public static SimpleRegistry<TransformationType> TRANSFORMATIONS = registryBuilder.buildAndRegister();
 
-	public static ItemGroup ITEM_GROUP = QuiltItemGroup.builder(id("general")).icon(() -> new ItemStack(ModItems.SCULK_VENT)).build();
+	public static ItemGroup ITEM_GROUP = QuiltItemGroup.builder(id("general")).icon(() -> new ItemStack(ModItems.VERUM)).build();
 
 	public static final Logger LOGGER = LoggerFactory.getLogger("Soul Under Sculk");
 
@@ -35,6 +36,8 @@ public class SoulUnderSculk implements ModInitializer {
 		ModItems.init();
 
 		ModTransformations.init();
+
+		ModAdvancements.init();
 
 		CommandRegistrationCallback.EVENT.register(((dispatcher, buildContext, environment) -> {
 			SUSCommand.register(dispatcher, buildContext);

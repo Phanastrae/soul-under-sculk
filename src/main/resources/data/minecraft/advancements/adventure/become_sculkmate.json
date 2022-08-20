@@ -1,0 +1,30 @@
+{
+  "parent": "minecraft:adventure/root",
+  "criteria": {
+    "sculkmate": {
+      "conditions": {},
+      "trigger": "soul_under_sculk:become_sculkmate"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.soul_under_sculk.become_sculkmate.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "soul_under_sculk:verum",
+      "nbt": "{XPCharge:42069}"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.soul_under_sculk.become_sculkmate.title"
+    }
+  },
+  "requirements": [
+    [
+      "sculkmate"
+    ]
+  ]
+}

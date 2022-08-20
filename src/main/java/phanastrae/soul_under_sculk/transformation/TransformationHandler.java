@@ -24,6 +24,9 @@ public class TransformationHandler {
 
 		if(this.transformationType != type) {
 			this.transformationType = type;
+			if(this.transformationType != null) {
+				this.transformationType.onTransform(this);
+			}
 
 			if(player.world instanceof ServerWorld) {
 				setShouldSyncData(true);

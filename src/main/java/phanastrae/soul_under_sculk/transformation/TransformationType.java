@@ -1,10 +1,12 @@
 package phanastrae.soul_under_sculk.transformation;
 
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import phanastrae.soul_under_sculk.SoulUnderSculk;
 
 public abstract class TransformationType {
@@ -33,4 +35,8 @@ public abstract class TransformationType {
 	public abstract Identifier getIconId();
 
 	public abstract boolean shouldRenderIcon();
+
+	public abstract void handleIsInvulnerableTo(DamageSource damageSource, CallbackInfoReturnable cir);
+
+	public abstract void onTransform(TransformationHandler transHandler);
 }

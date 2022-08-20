@@ -27,6 +27,7 @@ public class SculkmateEntityModel<T extends LivingEntity> extends EntityModel<T>
 	public final ModelPart toothLowerRightBack;
 	public final ModelPart headEnderback;
 	public final ModelPart innerHead;
+	public final ModelPart innerHat;
 	public float leaningPitch;
 
 	public SculkmateEntityModel(ModelPart modelPart) {
@@ -49,6 +50,7 @@ public class SculkmateEntityModel<T extends LivingEntity> extends EntityModel<T>
 
 		this.headEnderback = modelPart.getChild("head_enderback");
 		this.innerHead = modelPart.getChild("inner_head");
+		this.innerHat = modelPart.getChild("inner_hat");
 	}
 
 	@Override
@@ -76,10 +78,14 @@ public class SculkmateEntityModel<T extends LivingEntity> extends EntityModel<T>
 
 	@Override
 	public void setAngles(T livingEntity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
+		for(ModelPart part : new ModelPart[]{this.rootFloor, this.leftLeg, this.rightLeg, this.lowerTorso}) {
+			part.resetTransform();
+		}
 		animateLimbs(limbAngle, limbDistance);
 		runningSway(limbAngle, limbDistance, headYaw, headPitch);
 		passiveSway(animationProgress);
 		eyeJiggle(livingEntity, limbAngle, limbDistance, animationProgress, headYaw, headPitch);
+		adjustPosing(livingEntity, limbAngle, limbDistance, animationProgress, headYaw, headPitch);
 	}
 
 	public void animateLimbs(float limbAngle, float limbDistance) {
@@ -119,6 +125,31 @@ public class SculkmateEntityModel<T extends LivingEntity> extends EntityModel<T>
 		float h = MathHelper.sin(f);
 		this.lowerTorso.roll += 0.04F * g;
 		this.lowerTorso.pitch += 0.04F * h;
+	}
+
+	public void adjustPosing(T livingEntity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
+		if (this.riding) {
+			this.rightLeg.pitch = -1.4137167F;
+			this.rightLeg.yaw = (float) (Math.PI / 10);
+			this.rightLeg.roll = 0.07853982F;
+			this.leftLeg.pitch = -1.4137167F;
+			this.leftLeg.yaw = (float) (-Math.PI / 10);
+			this.leftLeg.roll = -0.07853982F;
+
+			this.rightLeg.pivotZ += -5;
+			this.rightLeg.pivotY += -5;
+			this.rightLeg.pivotX = -5;
+			this.leftLeg.pivotZ += -5;
+			this.leftLeg.pivotY += -5;
+			this.leftLeg.pivotX = 5;
+		}
+		if (livingEntity.isSneaking()) {
+			this.lowerTorso.pitch += 0.2F;
+			this.lowerTorso.pivotY += 2F;
+
+			this.rightLeg.pivotZ += 3;
+			this.leftLeg.pivotZ += 3;
+		}
 	}
 
 	protected float lerpAngle(float angleOne, float angleTwo, float magnitude) {
@@ -206,6 +237,10 @@ public class SculkmateEntityModel<T extends LivingEntity> extends EntityModel<T>
 
 		modelPartData.addChild( // xyz are 16 not 8 because player texture is a different size
 				"inner_head", centeredCuboid(0, 0, 0, 16, 16, 16, 0, 0), ModelTransform.pivot(0,  -5.5F, -4.5F)
+		);
+
+		modelPartData.addChild( // xyz are 16 not 8 because player texture is a different size
+				"inner_hat", ModelPartBuilder.create().uv(64, 0).cuboid(-8f, -8f, -8f, 16f, 16f, 16f, dilation.add(1)), ModelTransform.pivot(0,  -5.5F, -4.5F)
 		);
 
 		return modelData;

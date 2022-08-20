@@ -23,10 +23,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import phanastrae.soul_under_sculk.SoulUnderSculk;
-import phanastrae.soul_under_sculk.render.PlayerEntityRendererExtension;
-import phanastrae.soul_under_sculk.render.RenderHelper;
-import phanastrae.soul_under_sculk.render.SculkmateEntityModel;
-import phanastrae.soul_under_sculk.render.SculkmateFeatureRenderer;
+import phanastrae.soul_under_sculk.render.*;
 import phanastrae.soul_under_sculk.transformation.TransformationHandler;
 import phanastrae.soul_under_sculk.util.TransformableEntity;
 
@@ -57,7 +54,7 @@ public class LivingEntityRendererMixin<T extends LivingEntity, M extends EntityM
 		if(transHandler.shouldClientReloadModel());
 		if(!(this.model instanceof PlayerEntityModel)) return;
 		PlayerEntityModel model = (PlayerEntityModel)this.model;
-		for(ModelPart part : new ModelPart[]{model.head, model.hat, model.body, model.jacket, model.leftArm, model.leftSleeve, model.rightArm, model.rightSleeve, model.leftLeg, model.leftPants, model.rightLeg, model.rightPants}) {
+		for(ModelPart part : new ModelPart[]{model.head, model.hat, model.body, model.jacket, model.leftArm, model.leftSleeve, model.rightArm, model.rightSleeve, model.leftLeg, model.leftPants, model.rightLeg, model.rightPants, ((PlayerEntityModelExtension)model).getEar(), ((PlayerEntityModelExtension)model).getCloak()}) {
 			part.resetTransform();
 		}
 	}
@@ -85,10 +82,10 @@ public class LivingEntityRendererMixin<T extends LivingEntity, M extends EntityM
 		sculkmateModel.animateModel(livingEntity, o, n, g);
 		sculkmateModel.setAngles(livingEntity, o, n, l, k, m);
 
-		this.adjustModel(model, sculkmateModel);
+		LivingEntityRendererMixin.adjustModel(model, sculkmateModel);
 	}
 
-	public void adjustModel(PlayerEntityModel model, SculkmateEntityModel sculkmateModel) {
+	private static void adjustModel(PlayerEntityModel model, SculkmateEntityModel sculkmateModel) {
 		MatrixStack stack = new MatrixStack();
 
 		stack.push(); //rootfloor
@@ -159,5 +156,7 @@ public class LivingEntityRendererMixin<T extends LivingEntity, M extends EntityM
 		model.rightSleeve.copyTransform(model.rightArm);
 		model.hat.copyTransform(model.head);
 		model.jacket.copyTransform(model.body);
+		((PlayerEntityModelExtension)model).getEar().copyTransform(model.head);
+		((PlayerEntityModelExtension)model).getCloak().copyTransform(model.body);
 	}
 }

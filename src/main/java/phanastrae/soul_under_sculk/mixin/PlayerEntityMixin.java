@@ -6,6 +6,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import org.spongepowered.asm.mixin.Mixin;
@@ -13,8 +14,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import phanastrae.soul_under_sculk.SoulUnderSculk;
-import phanastrae.soul_under_sculk.item.VerumDamageSource;
 import phanastrae.soul_under_sculk.item.VerumItem;
 import phanastrae.soul_under_sculk.transformation.TransformationHandler;
 import phanastrae.soul_under_sculk.util.TransformableEntity;
@@ -72,5 +71,14 @@ public class PlayerEntityMixin implements TransformableEntity {
 		if(((PlayerEntity)(Object)this).getInventory().getMainHandStack().getItem() instanceof VerumItem) {
 			VerumItem.yoinkXp((LivingEntity)(Object)this, (PlayerEntity)entity, ((PlayerEntity)(Object)this).getInventory().getMainHandStack(), 1);
 		}
+	}
+
+	@Inject(method = "isInvulnerableTo", at = @At("HEAD"), cancellable = true)
+	public void isInvulnerableTo(DamageSource damageSource, CallbackInfoReturnable cir) {
+		if(!(((PlayerEntity)(Object)this) instanceof TransformableEntity)) return;
+		TransformationHandler transHandler = ((TransformableEntity)(PlayerEntity)(Object)this).getTransHandler();
+		if(transHandler == null) return;
+		if(!transHandler.isTransformed()) return;
+		transHandler.transformationType.handleIsInvulnerableTo(damageSource, cir);
 	}
 }

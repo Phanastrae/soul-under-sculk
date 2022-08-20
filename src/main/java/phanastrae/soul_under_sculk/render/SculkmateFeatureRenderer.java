@@ -64,12 +64,14 @@ public class SculkmateFeatureRenderer extends FeatureRenderer<AbstractClientPlay
 		this.model.headEnderback.render(matrixStack, vertexConsumer, light, OverlayTexture.DEFAULT_UV, 1.0F, 1.0F, 1.0F, 1.0F);
 
 		this.model.innerHead.scaleX = this.model.innerHead.scaleY = this.model.innerHead.scaleZ = 0.25F;
+		this.model.innerHat.copyTransform(this.model.innerHead);
 		vertexConsumer = vertexConsumerProvider.getBuffer(RenderLayer.getEntityTranslucent(WHITE)); // ideally we'd just render without a texture here but i have no idea if minecraft has that and i don't really want to have to do it myself
 		this.model.innerHead.render(matrixStack, vertexConsumer, light, overlay, 1F, 0.4F, 0.8F, 0.6F);
 		vertexConsumer = vertexConsumerProvider.getBuffer(RenderLayer.getEntityGlint());
 		this.model.innerHead.render(matrixStack, vertexConsumer, light, OverlayTexture.DEFAULT_UV, 1F, 1F, 1F, 1F);
 		vertexConsumer = vertexConsumerProvider.getBuffer(RenderLayer.getEntityTranslucentEmissive(livingEntity.getSkinTexture()));
-		this.model.innerHead.render(matrixStack, vertexConsumer, light, overlay, 1F, 0.2F, 0.7F, 0.25F);
+		this.model.innerHead.render(matrixStack, vertexConsumer, light, overlay, 1F, 0.2F, 0.7F, 0.2F);
+		this.model.innerHat.render(matrixStack, vertexConsumer, light, overlay, 1F, 0.2F, 0.7F, 0.15F);
 		matrixStack.pop();
 	}
 }
