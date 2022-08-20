@@ -1,15 +1,28 @@
 package phanastrae.soul_under_sculk.item;
 
+import com.google.common.collect.Multimap;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.ExperienceOrbEntity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.attribute.EntityAttribute;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.damage.EntityDamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.*;
+import net.minecraft.util.random.RandomGenerator;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import phanastrae.soul_under_sculk.block.CreativeVerumChargerBlock;
@@ -28,70 +41,169 @@ public class VerumItem extends Item {
 	@Override
 	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
 		ItemStack stack = user.getStackInHand(hand);
-		if(stack.getItem() instanceof VerumItem) {
-			if(world instanceof ServerWorld) {
-				if (getIsTransCharged(stack)) {
-					transformPlayer(stack, user);
-					user.getItemCooldownManager().set(this, 20);
-				} else {
-					yoinkXp(user, 5);
-					user.getItemCooldownManager().set(this, 20);
-				}
-			}
-			return TypedActionResult.success(stack);
-		}
-		return TypedActionResult.fail(stack);
+		user.setCurrentHand(hand);
+		return TypedActionResult.consume(stack);
 	}
 
 	@Override
-	public ActionResult useOnBlock(ItemUsageContext context) {
-		if(context.getWorld().getBlockState(context.getBlockPos()).getBlock() instanceof CreativeVerumChargerBlock) {
-			setCharge(context.getStack(), getMaxCharge(context.getStack()));
-			return ActionResult.SUCCESS;
+	public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user) {
+		if(!(user instanceof PlayerEntity)) return stack;
+		PlayerEntity player = (PlayerEntity)user;
+		TransformationHandler transformationHandler = ((TransformableEntity)player).getTransHandler();
+		boolean isSculkmate = transformationHandler != null && ModTransformations.SCULKMATE.equals(transformationHandler.getTransformation());
+		if(world instanceof ServerWorld) {
+			if(isSculkmate) {
+				transformPlayer(stack, player, false);
+				player.getItemCooldownManager().set(this, 60);
+			} else if (getIsTransCharged(stack)) {
+				transformPlayer(stack, player, true);
+				player.getItemCooldownManager().set(this, 60);
+			} else {
+				yoinkXp(player, player, stack, 5);
+				player.getItemCooldownManager().set(this, 20);
+			}
 		}
-		return ActionResult.PASS;
+		return stack;
 	}
 
-	public static boolean transformPlayer(ItemStack stack, PlayerEntity player) {
-		if (!getIsTransCharged(stack)) return false;
+	@Override
+	public void usageTick(World world, LivingEntity user, ItemStack stack, int remainingUseTicks) {
+		if(world instanceof ClientWorld) {
+			if(getIsTransCharged(stack)) {
+				RandomGenerator randomGenerator = world.getRandom();
+				for (int i = 0; i < 8; i++) {
+					float dx = user.getWidth() * (randomGenerator.nextFloat() - 0.5F);
+					float dy = user.getWidth() * (randomGenerator.nextFloat() - 0.5F);
+					float dz = user.getWidth() * (randomGenerator.nextFloat() - 0.5F);
+					float vx = (randomGenerator.nextFloat() * 2 - 1) * 0.1F;
+					float vy = (randomGenerator.nextFloat() * 2 - 1) * 0.1F;
+					float vz = (randomGenerator.nextFloat() * 2 - 1) * 0.1F;
+					world.addParticle(ParticleTypes.SCULK_CHARGE_POP, user.getX() + dx, user.getY() + dy, user.getZ() + dz, vx, vy, vz);
+				}
+			}
+		}
+		super.usageTick(world, user, stack, remainingUseTicks);
+	}
 
-		addCharge(stack, -getTransCharge(stack));
+	@Override
+	public int getMaxUseTime(ItemStack stack) {
+		return getIsTransCharged(stack) ? 40 : 12;
+	}
+
+	@Override
+	public UseAction getUseAction(ItemStack stack) {
+		return UseAction.SPEAR;
+	}
+
+	public static boolean transformPlayer(ItemStack stack, PlayerEntity player, boolean consumeCharge) {
+		if (consumeCharge && !getIsTransCharged(stack)) return false;
+
+		if(consumeCharge) {
+			addCharge(stack, -getTransCharge(stack));
+		}
 
 		TransformationHandler transHandler = ((TransformableEntity)player).getTransHandler();
-		TransformationType transType = transHandler.getTransformation();
-		if(transType == ModTransformations.SCULKMATE) {
+		TransformationType currentTransformation = transHandler.getTransformation();
+		if(currentTransformation == ModTransformations.SCULKMATE) {
 			transHandler.setTransformation(null);
 		} else {
 			transHandler.setTransformation(ModTransformations.SCULKMATE);
 		}
 		// TODO: add Egg stage
+
+		if(player.getWorld() instanceof ServerWorld) {
+			player.getWorld().playSound(
+					null,
+					player.getX(),
+					player.getY(),
+					player.getZ(),
+					SoundEvents.ENTITY_ENDERMAN_DEATH,
+					SoundCategory.PLAYERS,
+					2.0F,
+					0.5F
+			);
+			player.getWorld().playSound(
+					null,
+					player.getX(),
+					player.getY(),
+					player.getZ(),
+					SoundEvents.ENTITY_ENDERMAN_DEATH,
+					SoundCategory.PLAYERS,
+					2.0F,
+					1.5F
+			);
+			player.getWorld().playSound(
+					null,
+					player.getX(),
+					player.getY(),
+					player.getZ(),
+					SoundEvents.ENTITY_WARDEN_ROAR,
+					SoundCategory.PLAYERS,
+					4.0F,
+					1.5F
+			);
+			RandomGenerator random = player.getRandom();
+			((ServerWorld)player.world).spawnParticles(ParticleTypes.SCULK_SOUL, player.getX(), player.getY(), player.getZ(), 64, 0, 0, 0, 0.1F);
+		}
 		return true;
 	}
 
-	public static void yoinkXp(PlayerEntity player, int levels) {
-		if(player.world instanceof ServerWorld) {
+	public static void yoinkXp(LivingEntity yoinker, PlayerEntity yoinkee, ItemStack stack, int levels) {
+		if(yoinkee.world instanceof ServerWorld) {
+			boolean yoinkeeCreative = yoinkee.getAbilities().creativeMode;
 			int xpYoinked = 0;
-			for (int i = 0; i < levels; i++) {
-				xpYoinked += player.experienceProgress * player.getNextLevelExperience();
-				if (player.experienceLevel == 0) {
-					player.experienceProgress = 0.0F;
-				} else if (player.experienceLevel > 0) {
-					player.addExperienceLevels(-1);
-					xpYoinked += (1 - player.experienceProgress) * player.getNextLevelExperience();
-				} else {
-					break;
+			if(!yoinkeeCreative) {
+				for (int i = 0; i < levels; i++) {
+					xpYoinked += yoinkee.experienceProgress * yoinkee.getNextLevelExperience();
+					if (yoinkee.experienceLevel == 0) {
+						yoinkee.experienceProgress = 0.0F;
+					} else if (yoinkee.experienceLevel > 0) {
+						yoinkee.addExperienceLevels(-1);
+						xpYoinked += (1 - yoinkee.experienceProgress) * yoinkee.getNextLevelExperience();
+					} else {
+						break;
+					}
 				}
+			} else {
+				xpYoinked = (int)((getMaxCharge(stack) - getCharge(stack)) * 1.1F); // give bonus because why not
 			}
-			ExperienceOrbEntity.spawn((ServerWorld) player.world, player.getPos(), xpYoinked);
-			player.damage(DamageSource.thorns(player), levels); // TODO: add custom damage source and death mesage
+			ExperienceOrbEntity.spawn((ServerWorld) yoinker.world, yoinker.getPos(), xpYoinked);
+			if(!yoinkeeCreative) {
+				yoinkee.damage(VerumDamageSource.getVerumDamageSource(yoinker), levels); // TODO: add custom damage source and death mesage
+			}
 		}
 	}
 
-	public static int consumeXp(ItemStack stack, int amount) {
+	public static int consumeXp(ItemStack stack, int amount, PlayerEntity player) {
 		int xpConsumed = Math.min(getMaxCharge(stack) - getCharge(stack), amount);
 		if(xpConsumed > 0) {
 			amount -= xpConsumed;
+			boolean wasCharged = getIsTransCharged(stack);
 			addCharge(stack, xpConsumed);
+			if(player.getWorld() instanceof ServerWorld && getIsTransCharged(stack) && !wasCharged) {
+				player.getWorld().playSound(
+						null,
+						player.getX(),
+						player.getY(),
+						player.getZ(),
+						SoundEvents.ENTITY_ENDERMAN_SCREAM,
+						SoundCategory.PLAYERS,
+						3.0F,
+						1.5F
+				);
+				player.getWorld().playSound(
+						null,
+						player.getX(),
+						player.getY(),
+						player.getZ(),
+						SoundEvents.BLOCK_SCULK_SENSOR_CLICKING,
+						SoundCategory.PLAYERS,
+						3.0F,
+						0.5F
+				);
+				RandomGenerator random = player.getRandom();
+				((ServerWorld)player.world).spawnParticles(ParticleTypes.SCULK_CHARGE_POP, player.getX(), player.getY(), player.getZ(), 32, player.getWidth() / 2, player.getHeight() / 2, player.getWidth() / 2, 0.1F);
+			}
 		}
 		return amount;
 	}
@@ -120,14 +232,20 @@ public class VerumItem extends Item {
 	@Override
 	public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
 		super.appendTooltip(stack, world, tooltip, context);
+		TransformationHandler handler = ((TransformableEntity)MinecraftClient.getInstance().player).getTransHandler();
+		boolean isSculkmate = handler != null && ModTransformations.SCULKMATE.equals(handler.getTransformation());
 		if(!context.isAdvanced()) {
-			if (getIsTransCharged(stack)) {
+			if(isSculkmate) {
+				tooltip.add(Text.translatable("item.soul_under_sculk.trans_already").formatted(Formatting.RED));
+			} else if (getIsTransCharged(stack)) {
 				tooltip.add(Text.translatable("item.soul_under_sculk.trans_ready").formatted(Formatting.AQUA));
 			} else {
 				tooltip.add(Text.translatable("item.soul_under_sculk.trans_not_ready").formatted(Formatting.WHITE));
 			}
 		} else {
-			if (getIsTransCharged(stack)) {
+			if(isSculkmate) {
+				tooltip.add(Text.translatable("item.soul_under_sculk.trans_already_debug", getTransCharge(stack)).formatted(Formatting.RED));
+			} else if (getIsTransCharged(stack)) {
 				tooltip.add(Text.translatable("item.soul_under_sculk.trans_ready_debug", getTransCharge(stack)).formatted(Formatting.AQUA));
 			} else {
 				tooltip.add(Text.translatable("item.soul_under_sculk.trans_not_ready_debug", getTransCharge(stack)).formatted(Formatting.WHITE));

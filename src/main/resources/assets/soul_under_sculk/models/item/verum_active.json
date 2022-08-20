@@ -1,0 +1,28 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "soul_under_sculk:item/verum_active"
+  },
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [ 60, -170, 30 ],
+      "translation": [ -2, 0, 1 ],
+      "scale": [ 0.55, 0.55, 0.55 ]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [ 60, 10, -30 ],
+      "translation": [ -2, 0, 1 ],
+      "scale": [ 0.55, 0.55, 0.55 ]
+    },
+    "firstperson_righthand": {
+      "rotation": [ 10, 110, 35 ],
+      "translation": [ 0, 6.2, 1 ],
+      "scale": [ 0.68, 0.68, 0.68 ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [ 10, -70, -35 ],
+      "translation": [ 0, 6.2, 1 ],
+      "scale": [ 0.68, 0.68, 0.68 ]
+    }
+  }
+}

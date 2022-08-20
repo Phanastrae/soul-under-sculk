@@ -15,7 +15,7 @@ public class XPOrbRepairGearMixin { // TODO: check if this accidentally overmend
 	public int SoulUnderSculk_repairPlayerGears(int amount, PlayerEntity player) {
 		for(ItemStack stack : player.getItemsHand()) {
 			if(stack.getItem().equals(ModItems.VERUM)) {
-				amount = VerumItem.consumeXp(stack, amount);
+				amount = VerumItem.consumeXp(stack, amount, player);
 			}
 		}
 		return amount;

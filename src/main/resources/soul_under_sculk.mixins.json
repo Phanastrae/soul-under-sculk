@@ -16,7 +16,8 @@
       "PlayerEntityRendererMixin",
       "PlayerEntityModelMixin",
       "LivingEntityRendererMixin",
-      "ClientPlayNetworkHandlerMixin"
+      "ClientPlayNetworkHandlerMixin",
+      "BipedEntityModelMixin"
     ],
 	"injectors": {
 		"defaultRequire": 1

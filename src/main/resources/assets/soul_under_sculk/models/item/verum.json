@@ -1,6 +1,36 @@
 {
-  "parent": "minecraft:item/generated",
+  "parent": "minecraft:item/handheld",
   "textures": {
     "layer0": "soul_under_sculk:item/verum"
-  }
+  },
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [ -30, 40, 0 ],
+      "translation": [ 0, 2, 0 ],
+      "scale": [ 0.55, 0.55, 0.55 ]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [ -30, -140, 0 ],
+      "translation": [ 0, 2, 0 ],
+      "scale": [ 0.55, 0.55, 0.55 ]
+    },
+    "firstperson_righthand": {
+      "rotation": [ -20, -70, 5 ],
+      "translation": [ 3, 7, 1 ],
+      "scale": [ 0.68, 0.68, 0.68 ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [ -20, 110, -5 ],
+      "translation": [ 3, 7, 1 ],
+      "scale": [ 0.68, 0.68, 0.68 ]
+    }
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "active": 1
+      },
+      "model": "soul_under_sculk:item/verum_active"
+    }
+  ]
 }
