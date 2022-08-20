@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "soul_under_sculk:item/regression_vial"
+  }
+}

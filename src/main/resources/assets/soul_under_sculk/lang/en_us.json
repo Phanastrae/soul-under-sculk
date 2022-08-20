@@ -2,18 +2,18 @@
   "soul_under_sculk.not_yet_implemented":  "Not Yet Implemented",
 
   "item.soul_under_sculk.verum": "Scroulkkoth Verum",
+  "item.soul_under_sculk.regression_vial": "Regression Vial",
 
   "block.soul_under_sculk.sculk_vent": "Sculk Vent",
   "block.soul_under_sculk.creative_verum_charger": "Creative Verum Charger",
 
   "itemGroup.soul_under_sculk.general": "Soul Under Sculk",
 
-  "item.soul_under_sculk.trans_already": "Ready to Revert.",
-  "item.soul_under_sculk.trans_ready": "Ready to Scroulkkothicate...",
-  "item.soul_under_sculk.trans_not_ready": "Not Enough Experience to Scroulkkothicate!",
-  "item.soul_under_sculk.trans_already_debug": "Ready to Revert. (Cost: 0, Scroulkkothication Cost: %s)",
-  "item.soul_under_sculk.trans_ready_debug": "Ready to Scroulkkothicate... (Cost: %s)",
-  "item.soul_under_sculk.trans_not_ready_debug": "Not Enough Experience to Scroulkkothicate! (Cost: %s)",
+  "item.soul_under_sculk.verum.revert.ready": "Ready to Revert.",
+  "item.soul_under_sculk.verum.revert.not_ready": "Not Enough Experience to Revert",
+  "item.soul_under_sculk.verum.transform.ready": "Ready to Scroulkkothicate...",
+  "item.soul_under_sculk.verum.transform.not_ready": "Not Enough Experience to Scroulkkothicate!",
+  "item.soul_under_sculk.verum.cost": "(Cost: %s)",
   "item.soul_under_sculk.charge": "Charge: %s / %s",
 
   "commands.soul_under_sculk.transform.list.header": "Found %s Entries:",
@@ -31,7 +31,10 @@
 
   "death.attack.soul_under_sculk.verum_siphon": "%1$s's life experience was siphoned by %2$s",
   "death.attack.soul_under_sculk.verum_siphon.self": "%1$s tried to forget the experience",
+  "death.soul_under_sculk.regression": "%1$s decided to unrespawn",
 
   "advancements.soul_under_sculk.become_sculkmate.description": "Contort your Soul's Vessel and become a Scroulkkoth",
-  "advancements.soul_under_sculk.become_sculkmate.title": "When the Imposter is Sculk???"
+  "advancements.soul_under_sculk.become_sculkmate.title": "When the Imposter is Sculk???",
+
+  "effect.soul_under_sculk.regression": "Regression"
 }

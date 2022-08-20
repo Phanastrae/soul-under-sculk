@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "M": {
+      "item": "minecraft:milk_bucket"
+    },
+    "C": {
+      "item": "minecraft:crying_obsidian"
+    },
+    "g": {
+      "item": "minecraft:gunpowder"
+    },
+    "G": {
+      "item": "minecraft:glowstone_dust"
+    },
+    "B": {
+      "item": "minecraft:glass_bottle"
+    }
+  },
+  "pattern": [
+    "BMB",
+    "gCG",
+    " B "
+  ],
+  "result": {
+    "item": "soul_under_sculk:regression_vial",
+    "count": 3
+  }
+}

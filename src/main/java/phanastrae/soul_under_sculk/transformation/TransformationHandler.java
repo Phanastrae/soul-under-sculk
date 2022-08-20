@@ -1,5 +1,6 @@
 package phanastrae.soul_under_sculk.transformation;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
@@ -81,5 +82,16 @@ public class TransformationHandler {
 
 	public boolean shouldClientReloadModel() {
 		return shouldClientReloadModel;
+	}
+
+	public static TransformationHandler getFromEntity(Entity entity) {
+		if(!(entity instanceof TransformableEntity)) return null;
+		return ((TransformableEntity)entity).getTransHandler();
+	}
+
+	public static TransformationType getTypeFromEntity(Entity entity) {
+		TransformationHandler handler = getFromEntity(entity);
+		if(handler == null) return null;
+		return handler.getTransformation();
 	}
 }

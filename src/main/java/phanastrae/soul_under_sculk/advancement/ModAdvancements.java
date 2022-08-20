@@ -1,4 +1,4 @@
-package phanastrae.soul_under_sculk.misc;
+package phanastrae.soul_under_sculk.advancement;
 
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.advancement.criterion.LocationCriterion;

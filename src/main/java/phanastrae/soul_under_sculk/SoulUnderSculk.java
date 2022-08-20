@@ -3,6 +3,7 @@ package phanastrae.soul_under_sculk;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.*;
 import org.quiltmc.loader.api.ModContainer;
@@ -14,8 +15,8 @@ import org.slf4j.LoggerFactory;
 import phanastrae.soul_under_sculk.block.ModBlocks;
 import phanastrae.soul_under_sculk.command.SUSCommand;
 import phanastrae.soul_under_sculk.item.ModItems;
-import phanastrae.soul_under_sculk.misc.ModAdvancements;
-import phanastrae.soul_under_sculk.packets.ModPackets;
+import phanastrae.soul_under_sculk.advancement.ModAdvancements;
+import phanastrae.soul_under_sculk.effect.ModEffects;
 import phanastrae.soul_under_sculk.transformation.ModTransformations;
 import phanastrae.soul_under_sculk.transformation.TransformationType;
 
@@ -26,7 +27,11 @@ public class SoulUnderSculk implements ModInitializer {
 	public static FabricRegistryBuilder<TransformationType, SimpleRegistry<TransformationType>> registryBuilder = FabricRegistryBuilder.createSimple(TransformationType.class, id("transformation"));
 	public static SimpleRegistry<TransformationType> TRANSFORMATIONS = registryBuilder.buildAndRegister();
 
-	public static ItemGroup ITEM_GROUP = QuiltItemGroup.builder(id("general")).icon(() -> new ItemStack(ModItems.VERUM)).build();
+	public static ItemGroup ITEM_GROUP = QuiltItemGroup.builder(id("general")).icon(() -> {
+		ItemStack stack = new ItemStack(ModItems.VERUM);
+		stack.getOrCreateNbt().putBoolean("hideItemBar", true);
+		return stack;
+	}).build();
 
 	public static final Logger LOGGER = LoggerFactory.getLogger("Soul Under Sculk");
 
@@ -34,7 +39,7 @@ public class SoulUnderSculk implements ModInitializer {
 	public void onInitialize(ModContainer mod) {
 		ModBlocks.init();
 		ModItems.init();
-
+		ModEffects.init();
 		ModTransformations.init();
 
 		ModAdvancements.init();

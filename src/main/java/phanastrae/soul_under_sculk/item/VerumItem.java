@@ -4,9 +4,12 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.ExperienceOrbEntity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -39,13 +42,8 @@ public class VerumItem extends Item {
 	public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user) {
 		if(!(user instanceof PlayerEntity)) return stack;
 		PlayerEntity player = (PlayerEntity)user;
-		TransformationHandler transformationHandler = ((TransformableEntity)player).getTransHandler();
-		boolean isSculkmate = transformationHandler != null && ModTransformations.SCULKMATE.equals(transformationHandler.getTransformation());
 		if(!world.isClient) {
-			if(isSculkmate) {
-				transformPlayer(stack, player, false);
-				player.getItemCooldownManager().set(this, 60);
-			} else if (getIsTransCharged(stack)) {
+			if (getIsTransCharged(stack)) {
 				transformPlayer(stack, player, true);
 				player.getItemCooldownManager().set(this, 60);
 			} else {
@@ -98,6 +96,9 @@ public class VerumItem extends Item {
 			transHandler.setTransformation(null);
 		} else {
 			transHandler.setTransformation(ModTransformations.SCULKMATE);
+			if(!player.getWorld().isClient) {
+				player.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 60, 9));
+			}
 		}
 		// TODO: add Egg stage
 
@@ -132,7 +133,6 @@ public class VerumItem extends Item {
 					4.0F,
 					1.5F
 			);
-			RandomGenerator random = player.getRandom();
 			((ServerWorld)player.world).spawnParticles(ParticleTypes.SCULK_SOUL, player.getX(), player.getY(), player.getZ(), 64, 0, 0, 0, 0.1F);
 		}
 		return true;
@@ -200,7 +200,9 @@ public class VerumItem extends Item {
 
 	@Override
 	public boolean isItemBarVisible(ItemStack stack) {
-		return true;
+		NbtCompound nbt = stack.getNbt();
+		if(nbt == null) return true;
+		return !stack.getNbt().getBoolean("hideItemBar");
 	}
 
 	@Override
@@ -224,22 +226,27 @@ public class VerumItem extends Item {
 		super.appendTooltip(stack, world, tooltip, context);
 		TransformationHandler handler = ((TransformableEntity)MinecraftClient.getInstance().player).getTransHandler();
 		boolean isSculkmate = handler != null && ModTransformations.SCULKMATE.equals(handler.getTransformation());
-		if(!context.isAdvanced()) {
+		Formatting color = Formatting.WHITE;
+		String string = "item.soul_under_sculk.verum";
+		if(isSculkmate) {
+			string += ".revert";
+		} else {
+			string += ".transform";
+		}
+		if(getIsTransCharged(stack)) {
+			string += ".ready";
 			if(isSculkmate) {
-				tooltip.add(Text.translatable("item.soul_under_sculk.trans_already").formatted(Formatting.RED));
-			} else if (getIsTransCharged(stack)) {
-				tooltip.add(Text.translatable("item.soul_under_sculk.trans_ready").formatted(Formatting.AQUA));
+				color = Formatting.RED;
 			} else {
-				tooltip.add(Text.translatable("item.soul_under_sculk.trans_not_ready").formatted(Formatting.WHITE));
+				color = Formatting.AQUA;
 			}
 		} else {
-			if(isSculkmate) {
-				tooltip.add(Text.translatable("item.soul_under_sculk.trans_already_debug", getTransCharge(stack)).formatted(Formatting.RED));
-			} else if (getIsTransCharged(stack)) {
-				tooltip.add(Text.translatable("item.soul_under_sculk.trans_ready_debug", getTransCharge(stack)).formatted(Formatting.AQUA));
-			} else {
-				tooltip.add(Text.translatable("item.soul_under_sculk.trans_not_ready_debug", getTransCharge(stack)).formatted(Formatting.WHITE));
-			}
+			string += ".not_ready";
+		}
+		Text debug = context.isAdvanced() ? Text.literal(" ").append(Text.translatable("item.soul_under_sculk.verum.cost", getTransCharge(stack))) : Text.empty();
+		tooltip.add(Text.translatable(string).append(debug).formatted(color));
+
+		if(context.isAdvanced()) {
 			tooltip.add(Text.translatable("item.soul_under_sculk.charge", getCharge(stack), getMaxCharge(stack)).formatted(Formatting.GREEN));
 		}
 	}

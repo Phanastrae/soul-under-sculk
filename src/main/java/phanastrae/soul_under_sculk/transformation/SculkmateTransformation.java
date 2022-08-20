@@ -1,8 +1,6 @@
 package phanastrae.soul_under_sculk.transformation;
 
-import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.EntityDamageSource;
 import net.minecraft.entity.mob.warden.WardenEntity;
@@ -10,7 +8,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import phanastrae.soul_under_sculk.SoulUnderSculk;
-import phanastrae.soul_under_sculk.misc.ModAdvancements;
+import phanastrae.soul_under_sculk.advancement.ModAdvancements;
 
 public class SculkmateTransformation extends TransformationType {
 	@Override
