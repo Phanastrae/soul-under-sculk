@@ -3,7 +3,6 @@ package phanastrae.soul_under_sculk;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.*;
 import org.quiltmc.loader.api.ModContainer;

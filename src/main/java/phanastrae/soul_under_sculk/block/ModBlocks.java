@@ -1,7 +1,6 @@
 package phanastrae.soul_under_sculk.block;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.Material;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.registry.Registry;

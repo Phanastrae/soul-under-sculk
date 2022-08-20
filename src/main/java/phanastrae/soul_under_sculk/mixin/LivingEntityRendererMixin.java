@@ -1,35 +1,25 @@
 package phanastrae.soul_under_sculk.mixin;
 
 import net.minecraft.client.model.ModelPart;
-import net.minecraft.client.model.ModelTransform;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.render.entity.model.PlayerEntityModel;
-import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.*;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
-import phanastrae.soul_under_sculk.SoulUnderSculk;
 import phanastrae.soul_under_sculk.render.*;
 import phanastrae.soul_under_sculk.transformation.TransformationHandler;
 import phanastrae.soul_under_sculk.util.TransformableEntity;
-
-import java.nio.FloatBuffer;
-
-import static net.minecraft.client.render.entity.LivingEntityRenderer.renderFlipped;
 
 @Mixin(LivingEntityRenderer.class)
 public class LivingEntityRendererMixin<T extends LivingEntity, M extends EntityModel<T>> extends EntityRenderer<T> {

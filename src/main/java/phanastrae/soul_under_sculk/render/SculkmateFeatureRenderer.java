@@ -60,7 +60,7 @@ public class SculkmateFeatureRenderer extends FeatureRenderer<AbstractClientPlay
 		this.model.lowerTorso.rotate(matrixStack);
 		this.model.head.rotate(matrixStack);
 
-		vertexConsumer = vertexConsumerProvider.getBuffer(RenderLayer.getEndPortal()); // TODO: see if i can add a custom similar renderlayer
+		vertexConsumer = vertexConsumerProvider.getBuffer(RenderLayer.getEndPortal()); // TODO: see if i can add a custom similar renderlayer but funnier
 		this.model.headEnderback.render(matrixStack, vertexConsumer, light, OverlayTexture.DEFAULT_UV, 1.0F, 1.0F, 1.0F, 1.0F);
 
 		this.model.innerHead.scaleX = this.model.innerHead.scaleY = this.model.innerHead.scaleZ = 0.25F;

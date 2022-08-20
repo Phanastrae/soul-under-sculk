@@ -1,6 +1,5 @@
 package phanastrae.soul_under_sculk.effect;
 
-import net.minecraft.client.particle.SoulParticle;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectType;

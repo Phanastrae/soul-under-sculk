@@ -159,7 +159,7 @@ public class VerumItem extends Item {
 			}
 			ExperienceOrbEntity.spawn((ServerWorld) yoinker.world, yoinker.getPos(), xpYoinked);
 			if(!yoinkeeCreative) {
-				yoinkee.damage(VerumDamageSource.getVerumDamageSource(yoinker), levels); // TODO: add custom damage source and death mesage
+				yoinkee.damage(VerumDamageSource.getVerumDamageSource(yoinker), levels);
 			}
 		}
 	}
@@ -218,7 +218,7 @@ public class VerumItem extends Item {
 
 	@Override
 	public boolean hasGlint(ItemStack stack) {
-		return getIsTransCharged(stack) || super.hasGlint(stack); // TODO: see if this color can be changed, maybe scrap it entirely and just change item model instead
+		return getIsTransCharged(stack) || super.hasGlint(stack);
 	}
 
 	@Override
