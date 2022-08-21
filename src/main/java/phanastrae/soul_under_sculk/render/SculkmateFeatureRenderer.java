@@ -26,6 +26,7 @@ import phanastrae.soul_under_sculk.util.TransformableEntity;
 
 import java.awt.*;
 import java.util.List;
+import java.util.Locale;
 
 @Environment(EnvType.CLIENT)
 public class SculkmateFeatureRenderer extends FeatureRenderer<AbstractClientPlayerEntity, PlayerEntityModel<AbstractClientPlayerEntity>> {
@@ -75,6 +76,8 @@ public class SculkmateFeatureRenderer extends FeatureRenderer<AbstractClientPlay
 		float[] obsidianColor = null;
 		float[] glowstoneColor = null;
 		float[] cryingColor = null;
+		Identifier earTexture = SCULKMATE_GLOWSCULK;
+		Identifier earTextureWhite = SCULKMATE_GLOWSCULK_WHITE;
 		TransformationData transData = transformationHandler.getTransformationData();
 		if(transData instanceof SculkmateTransformationData) {
 			SculkmateTransformationData sculkmateTransData = (SculkmateTransformationData)transData;
@@ -85,6 +88,20 @@ public class SculkmateFeatureRenderer extends FeatureRenderer<AbstractClientPlay
 			obsidianColor = tryGetColor(sculkmateTransData.getObsidianColor(), animationProgress, tickDelta, limbAngle, obsidianColor);
 			glowstoneColor = tryGetColor(sculkmateTransData.getGlowstoneColor(), animationProgress, tickDelta, limbAngle, glowstoneColor);
 			cryingColor = tryGetColor(sculkmateTransData.getCryingColor(), animationProgress, tickDelta, limbAngle, cryingColor);
+
+			this.model.rootFloor.scaleY = 1 + sculkmateTransData.getDistortionFactorLerp(tickDelta);
+			this.model.rootFloor.scaleX = this.model.rootFloor.scaleZ = 1 - sculkmateTransData.getDistortionFactorLerp(tickDelta);
+
+			String ear = sculkmateTransData.getEarType();
+			if(ear != null && !ear.equals("")) {
+				try {
+					earTexture = SoulUnderSculk.id("textures/entity/sculkmate/ear_types/" + ear.toLowerCase() + ".png");
+					earTextureWhite = SoulUnderSculk.id("textures/entity/sculkmate/ear_types/" + ear.toLowerCase() + "_white.png");
+				} catch (Exception e) {
+					earTexture = SCULKMATE_GLOWSCULK;
+					earTextureWhite = SCULKMATE_GLOWSCULK_WHITE;
+				}
+			}
 		}
 		VertexConsumer vertexConsumer;
 
@@ -105,7 +122,7 @@ public class SculkmateFeatureRenderer extends FeatureRenderer<AbstractClientPlay
 			this.model.render(matrixStack, vertexConsumer, light, overlay, sculkColor[0], sculkColor[1], sculkColor[2], 1F);
 		}
 
-		this.setDrawOnlyParts(model, model.getHasGlowSculk());
+		this.setDrawOnlyParts(model, model.getHasGlowSculkNoEar());
 		if(glowSculkColor == null) {
 			vertexConsumer = vertexConsumerProvider.getBuffer(RenderLayer.getEntityCutoutNoCull(SCULKMATE_GLOWSCULK));
 			this.model.render(matrixStack, vertexConsumer, light, overlay, 1, 1, 1, 1F);
@@ -115,6 +132,19 @@ public class SculkmateFeatureRenderer extends FeatureRenderer<AbstractClientPlay
 			vertexConsumer = vertexConsumerProvider.getBuffer(RenderLayer.getEntityCutoutNoCull(SCULKMATE_GLOWSCULK_WHITE));
 			this.model.render(matrixStack, vertexConsumer, light, overlay, glowSculkColor[0], glowSculkColor[1], glowSculkColor[2], 1F);
 			vertexConsumer = vertexConsumerProvider.getBuffer(RenderLayer.getEntityTranslucentEmissive(SCULKMATE_GLOWSCULK_WHITE));
+			this.model.render(matrixStack, vertexConsumer, light, overlay, glowSculkColor[0], glowSculkColor[1], glowSculkColor[2], 0.7F);
+		}
+
+		this.setDrawOnlyParts(model, model.getEars());
+		if(glowSculkColor == null) {
+			vertexConsumer = vertexConsumerProvider.getBuffer(RenderLayer.getEntityCutoutNoCull(earTexture));
+			this.model.render(matrixStack, vertexConsumer, light, overlay, 1, 1, 1, 1F);
+			vertexConsumer = vertexConsumerProvider.getBuffer(RenderLayer.getEntityTranslucentEmissive(earTexture));
+			this.model.render(matrixStack, vertexConsumer, light, overlay, 1, 1, 1, 0.7F);
+		} else {
+			vertexConsumer = vertexConsumerProvider.getBuffer(RenderLayer.getEntityCutoutNoCull(earTextureWhite));
+			this.model.render(matrixStack, vertexConsumer, light, overlay, glowSculkColor[0], glowSculkColor[1], glowSculkColor[2], 1F);
+			vertexConsumer = vertexConsumerProvider.getBuffer(RenderLayer.getEntityTranslucentEmissive(earTextureWhite));
 			this.model.render(matrixStack, vertexConsumer, light, overlay, glowSculkColor[0], glowSculkColor[1], glowSculkColor[2], 0.7F);
 		}
 

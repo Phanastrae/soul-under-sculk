@@ -85,7 +85,7 @@ public class SculkmateEntityModel<T extends LivingEntity> extends EntityModel<T>
 
 	@Override
 	public void setAngles(T livingEntity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
-		for(ModelPart part : new ModelPart[]{this.rootFloor, this.leftLeg, this.rightLeg, this.lowerTorso}) {
+		for(ModelPart part : new ModelPart[]{this.root, this.rootFloor, this.leftLeg, this.rightLeg, this.lowerTorso}) {
 			part.resetTransform();
 		}
 		animateLimbs(limbAngle, limbDistance);
@@ -283,6 +283,10 @@ public class SculkmateEntityModel<T extends LivingEntity> extends EntityModel<T>
 		return ImmutableList.of(this.lowerTorso, this.head, this.ears, this.leftLeg, this.rightLeg, this.backpack, this.backpackTop);
 	}
 
+	public Iterable<ModelPart> getHasGlowSculkNoEar() {
+		return ImmutableList.of(this.lowerTorso, this.head, this.leftLeg, this.rightLeg, this.backpack, this.backpackTop);
+	}
+
 	public Iterable<ModelPart> getHasBone() {
 		return ImmutableList.of(this.lowerTorso, this.head, this.leftLeg, this.rightLeg, this.frame, this.frame2, this.toothUpperLeftFront, this.toothUpperRightFront, this.toothUpperLeftBack, this.toothUpperRightBack, this.toothLowerLeftFront, this.toothLowerRightFront, this.toothLowerLeftBack, this.toothLowerRightBack);
 	}
@@ -297,5 +301,9 @@ public class SculkmateEntityModel<T extends LivingEntity> extends EntityModel<T>
 
 	public Iterable<ModelPart> getHasCrying() {
 		return ImmutableList.of(this.backpack, this.backpackTop);
+	}
+
+	public Iterable<ModelPart> getEars() {
+		return ImmutableList.of(this.ears);
 	}
 }

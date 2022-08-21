@@ -7,12 +7,21 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.particle.DustParticleEffect;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.random.RandomGenerator;
+import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import phanastrae.soul_under_sculk.SoulUnderSculk;
 import phanastrae.soul_under_sculk.item.VerumItem;
+import phanastrae.soul_under_sculk.transformation.CompositeColorEntry;
+import phanastrae.soul_under_sculk.transformation.SculkmateTransformationData;
+import phanastrae.soul_under_sculk.transformation.TransformationData;
 import phanastrae.soul_under_sculk.transformation.TransformationHandler;
 import phanastrae.soul_under_sculk.util.TransformableEntity;
 
@@ -72,11 +81,80 @@ public class PlayerEntityMixin implements TransformableEntity {
 	}
 
 	@Inject(method = "isInvulnerableTo", at = @At("HEAD"), cancellable = true)
-	public void isInvulnerableTo(DamageSource damageSource, CallbackInfoReturnable cir) {
+	public void SoulUnderSculk_isInvulnerableTo(DamageSource damageSource, CallbackInfoReturnable cir) {
 		if(!(((PlayerEntity)(Object)this) instanceof TransformableEntity)) return;
 		TransformationHandler transHandler = ((TransformableEntity)(PlayerEntity)(Object)this).getTransHandler();
 		if(transHandler == null) return;
 		if(!transHandler.isTransformed()) return;
 		transHandler.getTransformation().handleIsInvulnerableTo(damageSource, cir);
+	}
+
+	@Inject(method = "tick", at = @At("TAIL"))
+	public void SoulUnderSculk_tick(CallbackInfo ci){
+		PlayerEntity player = (PlayerEntity)(Object)this;
+		if(player == null) return;
+		World world = player.getWorld();
+		if(world == null) return;
+		if(world.isClient) {
+			TransformationHandler transformationHandler = TransformationHandler.getFromEntity(player);
+			if(transformationHandler != null) {
+				TransformationData transData = transHandler.getTransformationData();
+				if(transData instanceof SculkmateTransformationData) {
+					CompositeColorEntry cce = ((SculkmateTransformationData)transData).getParticleColor();
+					if(cce != null) {
+						if (cce.getColorEntries().size() > 0) {
+							int color = cce.getColorAtTime(player.age);
+							int rCurrent = (color & 0xFF0000) >> 16;
+							int gCurrent = (color & 0xFF00) >> 8;
+							int bCurrent = (color & 0xFF);
+							Vec3d vel = player.getVelocity();
+							int count = (int) Math.max(1, Math.min(20, 10 * vel.lengthSquared()));
+							RandomGenerator random = player.getWorld().getRandom();
+							for (int i = 0; i < count; i++) {
+								float yaw = (float) (player.bodyYaw * Math.PI / 180);
+								world.addParticle(new DustParticleEffect(new Vec3f(rCurrent / 255F, gCurrent / 255F, bCurrent / 255F), 0.5f), player.getX() + 0.3F * Math.cos(yaw) + player.getWidth() / 2 * (random.nextFloat() * 2 - 1), player.getY(), player.getZ() + 0.3F * Math.sin(yaw) + player.getWidth() / 2 * (random.nextFloat() * 2 - 1), (random.nextFloat() * 2 - 1) * 0.2f - vel.x / 4F, (random.nextFloat() * 2 - 1) * 0.2f - vel.y / 4F, (random.nextFloat() * 2 - 1) * 0.2f - vel.z / 4F);
+								world.addParticle(new DustParticleEffect(new Vec3f(rCurrent / 255F, gCurrent / 255F, bCurrent / 255F), 0.5f), player.getX() - 0.3F * Math.cos(yaw) + player.getWidth() / 2 * (random.nextFloat() * 2 - 1), player.getY(), player.getZ() - 0.3F * Math.sin(yaw) + player.getWidth() / 2 * (random.nextFloat() * 2 - 1), (random.nextFloat() * 2 - 1) * 0.2f - vel.x / 4F, (random.nextFloat() * 2 - 1) * 0.2f - vel.y / 4F, (random.nextFloat() * 2 - 1) * 0.2f - vel.z / 4F);
+							}
+						}
+					}
+
+					((SculkmateTransformationData) transData).updateDistortion();
+				}
+			}
+		}
+	}
+
+	@Inject(method = "jump", at = @At("HEAD"))
+	public void SoulUnderSculk_jump(CallbackInfo ci){
+		PlayerEntity player = (PlayerEntity)(Object)this;
+		if(player == null) return;
+		World world = player.getWorld();
+		if(world == null) return;
+		if(world.isClient) {
+			TransformationHandler transformationHandler = TransformationHandler.getFromEntity(player);
+			if(transformationHandler != null) {
+				TransformationData transData = transHandler.getTransformationData();
+				if(transData instanceof SculkmateTransformationData) {
+					float amount = player.isSneaking() ? 1.5F : 0.8F;
+					((SculkmateTransformationData)transData).setDistortionFactorTarget(amount);
+				}
+			}
+		}
+	}
+
+	@Inject(method = "handleFallDamage", at = @At("HEAD"))
+	public void SoulUnderSculk_handleFallDamage(float fallDistance, float damageMultiplier, DamageSource damageSource, CallbackInfoReturnable ci){
+		PlayerEntity player = (PlayerEntity)(Object)this;
+		World world = player.getWorld();
+		if(world != null && world.isClient) {
+			TransformationHandler transformationHandler = TransformationHandler.getFromEntity(player);
+			if(transformationHandler != null) {
+				TransformationData transData = transHandler.getTransformationData();
+				if(transData instanceof SculkmateTransformationData) {
+					float amount = Math.max(0, Math.min(1, player.fallDistance * 0.07F)) * 0.85F + 0.15F;
+					((SculkmateTransformationData)transData).setDistortionFactorTarget(-amount);
+				}
+			}
+		}
 	}
 }

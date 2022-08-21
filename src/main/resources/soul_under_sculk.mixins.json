@@ -9,7 +9,8 @@
       "ServerPlayerEntityMixin",
       "ArgumentTypeMixin",
       "EntityTrackerMixin",
-      "PlayerManagerMixin"
+      "PlayerManagerMixin",
+      "LivingEntityMixin"
     ],
 	"client": [
       "InGameHudMixin",

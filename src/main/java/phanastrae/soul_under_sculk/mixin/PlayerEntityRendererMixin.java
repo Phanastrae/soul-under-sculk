@@ -49,7 +49,7 @@ public class PlayerEntityRendererMixin extends LivingEntityRenderer implements P
 	@Inject(method = "getPositionOffset", at = @At("HEAD"), cancellable = true)
 	public void SoulUnderSculk_getPositionOffset(AbstractClientPlayerEntity player, float f, CallbackInfoReturnable cir) {
 		if(!(player instanceof TransformableEntity)) return;
-		TransformationHandler transHandler = ((TransformableEntity)player).getTransHandler();
+		TransformationHandler transHandler = TransformationHandler.getFromEntity(player);
 		if(transHandler == null) return;
 		if(!transHandler.isTransformed()) return;
 

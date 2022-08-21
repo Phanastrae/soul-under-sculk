@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "soul_under_sculk:sculk_vent"
+        "recipe": "soul_under_sculk:biomass"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -28,7 +28,7 @@
   ],
   "rewards": {
     "recipes": [
-      "soul_under_sculk:sculk_vent"
+      "soul_under_sculk:biomass"
     ]
   }
 }

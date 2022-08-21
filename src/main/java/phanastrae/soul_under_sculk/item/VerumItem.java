@@ -111,6 +111,8 @@ public class VerumItem extends Item {
 					transData.getObsidianColor().readNbt(nbt, "Obsidian");
 					transData.getGlowstoneColor().readNbt(nbt, "Glowstone");
 					transData.getCryingColor().readNbt(nbt, "Crying");
+					transData.getParticleColor().readNbt(nbt, "Particle");
+					transData.setEarType(nbt.getString("EarType"));
 				}
 			}
 
@@ -267,7 +269,11 @@ public class VerumItem extends Item {
 
 		NbtCompound biomassNbt = stack.getSubNbt("Biomass");
 		if(biomassNbt != null) {
-			for(String key : new String[]{"Eye", "Sculk", "GlowSculk", "Bone", "Obsidian", "Glowstone", "Crying"}) {
+			if(biomassNbt.contains("EarType")) {
+				String earType = biomassNbt.getString("EarType");
+				tooltip.add(Text.translatable("item.soul_under_sculk.verum.ear_type_applied", Text.translatable("item.soul_under_sculk.verum.ear_type." + earType)));
+			}
+			for(String key : new String[]{"Eye", "Sculk", "GlowSculk", "Bone", "Obsidian", "Glowstone", "Crying", "Particle"}) {
 				NbtCompound sub = biomassNbt.getCompound(key);
 				if(sub != null) {
 					int[] colors = sub.getIntArray("Colors");

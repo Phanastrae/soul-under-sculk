@@ -13,6 +13,13 @@ public class SculkmateTransformationData extends TransformationData {
 	private CompositeColorEntry obsidianColor = new CompositeColorEntry();
 	private CompositeColorEntry glowstoneColor = new CompositeColorEntry();
 	private CompositeColorEntry cryingColor = new CompositeColorEntry();
+	private CompositeColorEntry particleColor = new CompositeColorEntry();
+
+	private float distortionFactor = 0;
+	private float distortionFactorLast = 0;
+	private float distortionFactorTarget = 0;
+
+	private String earType;
 
 	public SculkmateTransformationData(TransformationHandler transHandler) {
 		super(transHandler);
@@ -27,6 +34,10 @@ public class SculkmateTransformationData extends TransformationData {
 		writeColorNbt(nbt, this.obsidianColor, "ObsidianColor");
 		writeColorNbt(nbt, this.glowstoneColor, "GlowstoneColor");
 		writeColorNbt(nbt, this.cryingColor, "CryingColor");
+		writeColorNbt(nbt, this.particleColor, "ParticleColor");
+		if(earType != null) {
+			nbt.putString("EarType", earType);
+		}
 	}
 
 	public void writeColorNbt(NbtCompound nbt, CompositeColorEntry cce, String key) {
@@ -44,6 +55,8 @@ public class SculkmateTransformationData extends TransformationData {
 		this.obsidianColor = readColorNbt(nbt, "ObsidianColor");
 		this.glowstoneColor = readColorNbt(nbt, "GlowstoneColor");
 		this.cryingColor = readColorNbt(nbt, "CryingColor");
+		this.particleColor = readColorNbt(nbt, "ParticleColor");
+		this.earType = nbt.getString("EarType");
 	}
 
 	public CompositeColorEntry readColorNbt(NbtCompound nbt, String key) {
@@ -110,5 +123,48 @@ public class SculkmateTransformationData extends TransformationData {
 
 	public void setCryingColor(CompositeColorEntry color) {
 		this.cryingColor = color;
+	}
+
+	public CompositeColorEntry getParticleColor() {
+		return this.particleColor;
+	}
+
+	public void setParticleColor(CompositeColorEntry color) {
+		this.particleColor = color;
+	}
+
+	public void updateDistortion() {
+		this.distortionFactorLast = this.distortionFactor;
+		this.distortionFactor = this.distortionFactorTarget + (this.distortionFactor - this.distortionFactorTarget) * 0.6F;
+		this.distortionFactor = Math.max(-0.9F, Math.min(0.9F, this.distortionFactor));
+		this.distortionFactorTarget *= 0.6F;
+	}
+
+	public float getDistortionFactorLerp(float tickDelta) {
+		return this.distortionFactor * tickDelta + this.distortionFactorLast * (1 - tickDelta);
+	}
+
+	public void setDistortionFactor(float f) {
+		this.distortionFactor = f;
+	}
+
+	public float getDistortionFactor() {
+		return this.distortionFactor;
+	}
+
+	public void setDistortionFactorTarget(float f) {
+		this.distortionFactorTarget = f;
+	}
+
+	public float getDistortionFactorTarget() {
+		return this.distortionFactorTarget;
+	}
+
+	public void setEarType(String str) {
+		this.earType = str;
+	}
+
+	public String getEarType() {
+		return this.earType;
 	}
 }
