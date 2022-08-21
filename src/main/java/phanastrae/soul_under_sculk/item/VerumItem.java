@@ -14,16 +14,17 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.*;
 import net.minecraft.util.random.RandomGenerator;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-import phanastrae.soul_under_sculk.transformation.ModTransformations;
-import phanastrae.soul_under_sculk.transformation.TransformationType;
+import phanastrae.soul_under_sculk.recipe.BiomassRecipe;
+import phanastrae.soul_under_sculk.transformation.*;
 import phanastrae.soul_under_sculk.util.TransformableEntity;
-import phanastrae.soul_under_sculk.transformation.TransformationHandler;
 
+import java.awt.*;
 import java.util.List;
 
 public class VerumItem extends Item {
@@ -95,10 +96,24 @@ public class VerumItem extends Item {
 		if(currentTransformation == ModTransformations.SCULKMATE) {
 			transHandler.setTransformation(null);
 		} else {
-			transHandler.setTransformation(ModTransformations.SCULKMATE);
 			if(!player.getWorld().isClient) {
 				player.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 60, 9));
 			}
+			transHandler.setTransformation(ModTransformations.SCULKMATE);
+			if(transHandler.getTransformationData() instanceof SculkmateTransformationData) {
+				SculkmateTransformationData transData = (SculkmateTransformationData) transHandler.getTransformationData();
+				NbtCompound nbt = stack.getSubNbt("Biomass");
+				if(nbt != null) {
+					transData.getEyeColor().readNbt(nbt, "Eye");
+					transData.getSculkColor().readNbt(nbt, "Sculk");
+					transData.getGlowSculkColor().readNbt(nbt, "GlowSculk");
+					transData.getBoneColor().readNbt(nbt, "Bone");
+					transData.getObsidianColor().readNbt(nbt, "Obsidian");
+					transData.getGlowstoneColor().readNbt(nbt, "Glowstone");
+					transData.getCryingColor().readNbt(nbt, "Crying");
+				}
+			}
+
 		}
 		// TODO: add Egg stage
 
@@ -249,6 +264,30 @@ public class VerumItem extends Item {
 		if(context.isAdvanced()) {
 			tooltip.add(Text.translatable("item.soul_under_sculk.charge", getCharge(stack), getMaxCharge(stack)).formatted(Formatting.GREEN));
 		}
+
+		NbtCompound biomassNbt = stack.getSubNbt("Biomass");
+		if(biomassNbt != null) {
+			for(String key : new String[]{"Eye", "Sculk", "GlowSculk", "Bone", "Obsidian", "Glowstone", "Crying"}) {
+				NbtCompound sub = biomassNbt.getCompound(key);
+				if(sub != null) {
+					int[] colors = sub.getIntArray("Colors");
+					int[] times = sub.getIntArray("Times");
+					if(colors.length > 0) {
+						boolean doInterpolation = sub.getBoolean("DoInterpolation");
+						CompositeColorEntry cce = new CompositeColorEntry(doInterpolation, false);
+						for (int i = 0; i < colors.length; i++) {
+							int time = (i < times.length) ? times[i] : BiomassRecipe.DEFAULT_TIME;
+							cce.addColorEntry(colors[i], time);
+						}
+						int t = 0;
+						if(MinecraftClient.getInstance() != null && MinecraftClient.getInstance().player != null) {
+							t = MinecraftClient.getInstance().player.age;
+						}
+						tooltip.add(Text.translatable("item.soul_under_sculk.verum.color_applied", Text.translatable("item.soul_under_sculk.verum.part." + key).setStyle(Style.EMPTY.withColor(cce.getColorAtTime(t)))));
+					}
+				}
+			}
+		}
 	}
 
 	public static int getCharge(ItemStack stack) {
@@ -264,11 +303,11 @@ public class VerumItem extends Item {
 	}
 
 	public static int getMaxCharge(ItemStack stack) {
-		return 2000; // TODO: add config option? or make this a more thought-through number? maybe make it dynamic based on upgrades?
+		return 2560; // TODO: add config option? or make this a more thought-through number? maybe make it dynamic based on upgrades?
 	}
 
 	public static int getTransCharge(ItemStack stack) {
-		return 500; // TODO: make transformation charge change based on upgrades?
+		return 160; // TODO: make transformation charge change based on upgrades?
 	}
 
 	public static boolean getIsTransCharged(ItemStack stack) {

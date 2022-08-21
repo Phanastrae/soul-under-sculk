@@ -67,7 +67,7 @@ public class RegressionVialItem extends Item {
 	@Override
 	public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
 		super.appendTooltip(stack, world, tooltip, context);
-		tooltip.add(Text.translatable("effect.soul_under_sculk.regression").append(" (0:30)").formatted(Formatting.RED));
+		tooltip.add(Text.translatable("potion.withDuration", Text.translatable("effect.soul_under_sculk.regression"), "0:30").formatted(Formatting.RED));
 	}
 
 	@Override

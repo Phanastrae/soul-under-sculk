@@ -11,6 +11,7 @@ import phanastrae.soul_under_sculk.SoulUnderSculk;
 import phanastrae.soul_under_sculk.advancement.ModAdvancements;
 
 public class SculkmateTransformation extends TransformationType {
+
 	@Override
 	public Identifier getIconId() {
 		return SoulUnderSculk.id("textures/gui/soul_under_sculk/transformation_icon/sculkmate.png");
@@ -44,5 +45,10 @@ public class SculkmateTransformation extends TransformationType {
 		if(!transHandler.player.world.isClient) {
 			ModAdvancements.BECOME_SCULKMATE.trigger((ServerPlayerEntity)transHandler.player);
 		}
+	}
+
+	@Override
+	public TransformationData createTransformationData(TransformationHandler transHandler) {
+		return new SculkmateTransformationData(transHandler);
 	}
 }

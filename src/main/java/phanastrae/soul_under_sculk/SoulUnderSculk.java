@@ -11,11 +11,13 @@ import org.quiltmc.qsl.command.api.CommandRegistrationCallback;
 import org.quiltmc.qsl.item.group.api.QuiltItemGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import phanastrae.soul_under_sculk.block.ModBlockEntities;
 import phanastrae.soul_under_sculk.block.ModBlocks;
 import phanastrae.soul_under_sculk.command.SUSCommand;
 import phanastrae.soul_under_sculk.item.ModItems;
 import phanastrae.soul_under_sculk.advancement.ModAdvancements;
 import phanastrae.soul_under_sculk.effect.ModEffects;
+import phanastrae.soul_under_sculk.recipe.ModRecipes;
 import phanastrae.soul_under_sculk.transformation.ModTransformations;
 import phanastrae.soul_under_sculk.transformation.TransformationType;
 
@@ -38,9 +40,11 @@ public class SoulUnderSculk implements ModInitializer {
 	public void onInitialize(ModContainer mod) {
 		ModBlocks.init();
 		ModItems.init();
+		ModBlockEntities.init();
 		ModEffects.init();
 		ModTransformations.init();
 
+		ModRecipes.init();
 		ModAdvancements.init();
 
 		CommandRegistrationCallback.EVENT.register(((dispatcher, buildContext, environment) -> {

@@ -9,12 +9,15 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
 
 public class SculkmateEntityModel<T extends LivingEntity> extends EntityModel<T> {
+	public final ModelPart root;
 	public final ModelPart rootFloor;
 	public final ModelPart lowerTorso;
 	public final ModelPart head;
 	public final ModelPart leftLeg;
 	public final ModelPart rightLeg;
 	public final ModelPart frame;
+	public final ModelPart frame2;
+	public final ModelPart ears;
 	public final ModelPart backpack;
 	public final ModelPart backpackTop;
 	public final ModelPart toothUpperLeftFront;
@@ -25,18 +28,22 @@ public class SculkmateEntityModel<T extends LivingEntity> extends EntityModel<T>
 	public final ModelPart toothLowerRightFront;
 	public final ModelPart toothLowerLeftBack;
 	public final ModelPart toothLowerRightBack;
+
 	public final ModelPart headEnderback;
 	public final ModelPart innerHead;
 	public final ModelPart innerHat;
 	public float leaningPitch;
 
 	public SculkmateEntityModel(ModelPart modelPart) {
+		this.root = modelPart;
 		this.rootFloor = modelPart.getChild("root_floor");
 		this.lowerTorso = rootFloor.getChild("lower_torso");
 		this.leftLeg = rootFloor.getChild("left_leg");
 		this.rightLeg = rootFloor.getChild("right_leg");
 		this.head = lowerTorso.getChild("head");
 		this.frame = head.getChild("frame");
+		this.frame2 = frame.getChild("frame2");
+		this.ears = head.getChild("ears");
 		this.backpack = lowerTorso.getChild("backpack");
 		this.backpackTop = head.getChild("backpack_top");
 		this.toothUpperLeftFront = head.getChild("tooth_left_front");
@@ -86,6 +93,7 @@ public class SculkmateEntityModel<T extends LivingEntity> extends EntityModel<T>
 		passiveSway(animationProgress);
 		eyeJiggle(livingEntity, limbAngle, limbDistance, animationProgress, headYaw, headPitch);
 		adjustPosing(livingEntity, limbAngle, limbDistance, animationProgress, headYaw, headPitch);
+		this.innerHead.scaleX = this.innerHead.scaleY = this.innerHead.scaleZ = 0.25F;
 	}
 
 	public void animateLimbs(float limbAngle, float limbDistance) {
@@ -204,11 +212,11 @@ public class SculkmateEntityModel<T extends LivingEntity> extends EntityModel<T>
 		ModelPartData frame = head.addChild(
 				"frame", centeredCuboid(0, 0, 0, 8, 9, 2, 0, 58), ModelTransform.pivot(0,  -5.5F, -10.5F)
 		);
-		head.addChild(
-				"ears", centeredCuboid(0, 0, 0, 32, 16, 0, 64, 0), ModelTransform.pivot(0,  -8F, -4.5F)
-		);
 		frame.addChild(
 				"frame2", centeredCuboid(0, 0, 0.05F, 12, 7, 2, 20, 58), ModelTransform.pivot(0,  0, 0)
+		);
+		head.addChild(
+				"ears", centeredCuboid(0, 0, 0, 32, 16, 0, 64, 0), ModelTransform.pivot(0,  -8F, -4.5F)
 		);
 		rootFloor.addChild(
 				"left_leg", centeredCuboid(0, -2.5F, 0, 6, 6, 7, 0, 45), ModelTransform.pivot(3.5F, -0.5F, 0)
@@ -255,7 +263,39 @@ public class SculkmateEntityModel<T extends LivingEntity> extends EntityModel<T>
 		this.rootFloor.render(matrices, vertices, light, overlay, red, green, blue, alpha);
 	}
 
-	protected Iterable<ModelPart> getTeeth() {
+	public ModelPart getRoot() {
+		return this.root;
+	}
+
+	public Iterable<ModelPart> getTeeth() {
 		return ImmutableList.of(this.toothUpperLeftFront, this.toothUpperRightFront, this.toothUpperLeftBack, this.toothUpperRightBack, this.toothLowerLeftFront, this.toothLowerRightFront, this.toothLowerLeftBack, this.toothLowerRightBack);
+	}
+
+	public Iterable<ModelPart> getHasEmissive() {
+		return ImmutableList.of(this.lowerTorso, this.head, this.ears, this.leftLeg, this.rightLeg, this.backpack, this.backpackTop);
+	}
+
+	public Iterable<ModelPart> getHasSculk() {
+		return ImmutableList.of(this.lowerTorso, this.head, this.leftLeg, this.rightLeg);
+	}
+
+	public Iterable<ModelPart> getHasGlowSculk() {
+		return ImmutableList.of(this.lowerTorso, this.head, this.ears, this.leftLeg, this.rightLeg, this.backpack, this.backpackTop);
+	}
+
+	public Iterable<ModelPart> getHasBone() {
+		return ImmutableList.of(this.lowerTorso, this.head, this.leftLeg, this.rightLeg, this.frame, this.frame2, this.toothUpperLeftFront, this.toothUpperRightFront, this.toothUpperLeftBack, this.toothUpperRightBack, this.toothLowerLeftFront, this.toothLowerRightFront, this.toothLowerLeftBack, this.toothLowerRightBack);
+	}
+
+	public Iterable<ModelPart> getHasObsidian() {
+		return ImmutableList.of(this.backpack, this.backpackTop);
+	}
+
+	public Iterable<ModelPart> getHasGlowstone() {
+		return ImmutableList.of(this.backpack, this.backpackTop);
+	}
+
+	public Iterable<ModelPart> getHasCrying() {
+		return ImmutableList.of(this.backpack, this.backpackTop);
 	}
 }

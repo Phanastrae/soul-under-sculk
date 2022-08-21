@@ -14,7 +14,9 @@ public class TransformationHandler {
 	private boolean shouldClientReloadModel = false;
 
 	public PlayerEntity player;
-	public TransformationType transformationType;
+	private TransformationType transformationType;
+	private TransformationData transformationData;
+	private TransformationData transformationDataLast;
 
 	public TransformationHandler(PlayerEntity player) {
 		this.player = player;
@@ -23,53 +25,71 @@ public class TransformationHandler {
 	public void setTransformation(TransformationType type) {
 		if(player == null) return;
 
-		if(this.transformationType != type) {
-			this.transformationType = type;
-			if(this.transformationType != null) {
-				this.transformationType.onTransform(this);
-			}
-
-			if(player.world instanceof ServerWorld) {
-				setShouldSyncData(true);
-			} else {
-				setShouldClientReloadModel(true);
-			}
-
-			player.calculateDimensions();
+		this.transformationType = type;
+		this.transformationDataLast = this.transformationData;
+		this.transformationData = transformationType == null ? null : type.createTransformationData(this);
+		if(this.transformationType != null) {
+			this.transformationType.onTransform(this);
 		}
+
+		if(player.world instanceof ServerWorld) {
+			setShouldSyncData(true);
+		} else {
+			setShouldClientReloadModel(true);
+		}
+
+		player.calculateDimensions();
 	}
 
 	public TransformationType getTransformation() {
 		return this.transformationType;
 	}
 
-	public boolean isTransformed() {
-		return getTransformation() != null;
+	public TransformationData getTransformationData() {
+		return this.transformationData;
 	}
 
-	public void readNbt(NbtCompound nbt) {
-		NbtCompound susNbt = nbt.getCompound("SoulUnderSculk");
+	public TransformationData getTransformationDataLast() {
+		return this.transformationDataLast;
+	}
 
-		this.transformationType = SoulUnderSculk.TRANSFORMATIONS.get(new Identifier(susNbt.getString("Transformation")));
-		player.calculateDimensions();
+	public boolean isTransformed() {
+		return getTransformation() != null;
 	}
 
 	public void writeNbt(NbtCompound nbt) {
 		NbtCompound susNbt = new NbtCompound();
 
 		susNbt.putString("Transformation", (this.transformationType == null) ? "" : this.transformationType.getRegistryId().toString());
+		if(this.transformationData != null) {
+			transformationData.writeNbt(susNbt);
+		}
 
 		nbt.put("SoulUnderSculk", susNbt);
 	}
 
+	public void readNbt(NbtCompound nbt) {
+		NbtCompound susNbt = nbt.getCompound("SoulUnderSculk");
+
+		setTransformation(SoulUnderSculk.TRANSFORMATIONS.get(new Identifier(susNbt.getString("Transformation"))));
+		if(this.transformationData != null) {
+			transformationData.readNbt(susNbt);
+		}
+	}
+
 	public void loadFromOnDeath(TransformationHandler oldTransHandler, boolean alive) {
 		if(alive || false) { // TODO: Curse of Transcendence
-			this.setTransformation(oldTransHandler.transformationType);
+			NbtCompound nbt = new NbtCompound();
+			oldTransHandler.writeNbt(nbt);
+			this.readNbt(nbt);
 		}
 	}
 
 	public void setShouldSyncData(boolean b) {
 		shouldSyncData = b;
+		if(!b && this.transformationData != null && this.transformationData.shouldSyncData()) {
+			this.transformationData.setShouldSyncData(false);
+		}
 	}
 
 	public boolean shouldSyncData() {

@@ -1,7 +1,11 @@
 package phanastrae.soul_under_sculk.block;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.BlockWithEntity;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.EndPortalBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundCategory;
@@ -11,12 +15,13 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 import phanastrae.soul_under_sculk.item.ModItems;
 import phanastrae.soul_under_sculk.item.VerumItem;
 
-public class CreativeVerumChargerBlock extends Block {
+public class CreativeVerumChargerBlock extends BlockWithEntity {
 	public CreativeVerumChargerBlock(Settings settings) {
-		super(settings);
+		super(settings.nonOpaque());
 	}
 
 	@Override
@@ -46,5 +51,16 @@ public class CreativeVerumChargerBlock extends Block {
 			}
 			return super.onUse(state, world, pos, player, hand, hit);
 		}
+	}
+
+	@Nullable
+	@Override
+	public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+		return new CreativeVerumChargerBlockEntity(pos, state);
+	}
+
+	@Override
+	public BlockRenderType getRenderType(BlockState state) {
+		return BlockRenderType.MODEL;
 	}
 }

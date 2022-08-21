@@ -25,4 +25,9 @@ public class EggTransformation extends TransformationType {
 	public void onTransform(TransformationHandler transHandler) {
 		//none
 	}
+
+	@Override
+	public TransformationData createTransformationData(TransformationHandler transHandler) {
+		return null;
+	}
 }

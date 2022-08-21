@@ -66,14 +66,14 @@ public class SUSCommand {
 			TransformationHandler transHandler = ((TransformableEntity)(PlayerEntity)serverPlayerEntity).getTransHandler();
 			TransformationType currentTransformation = transHandler.getTransformation();
 			TransformationType targetTransformation = (transArgument == null) ? null : transArgument.getTransformation();
-			if(currentTransformation != targetTransformation) {
+			if(!(currentTransformation == null && targetTransformation == null)) {
 				i++;
 				transHandler.setTransformation(targetTransformation);
 				if(currentTransformation != null && targetTransformation != null) {
 					context.getSource().sendFeedback(Text.translatable("commands.soul_under_sculk.transform.set.yty", serverPlayerEntity.getEntityName(), currentTransformation.getName(), targetTransformation.getName()), true);
-				} else if (currentTransformation == null) {
+				} else if (currentTransformation == null && targetTransformation != null) {
 					context.getSource().sendFeedback(Text.translatable("commands.soul_under_sculk.transform.set.nty", serverPlayerEntity.getEntityName(), targetTransformation.getName()), true);
-				} else {
+				} else if (targetTransformation == null && currentTransformation != null){
 					context.getSource().sendFeedback(Text.translatable("commands.soul_under_sculk.transform.set.ytn", serverPlayerEntity.getEntityName(), currentTransformation.getName()), true);
 				}
 			}

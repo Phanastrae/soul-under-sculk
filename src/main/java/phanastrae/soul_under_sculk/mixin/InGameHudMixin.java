@@ -57,7 +57,7 @@ public class InGameHudMixin extends DrawableHelper {
 		TransformationHandler transHandler = ((TransformableEntity) player).getTransHandler();
 		if(transHandler == null) return i;
 		if(!transHandler.isTransformed()) return i;
-		if(!transHandler.transformationType.shouldRenderIcon()) return i;
+		if(!transHandler.getTransformation().shouldRenderIcon()) return i;
 
 		Screen j = this.client.currentScreen;
 		if (j instanceof AbstractInventoryScreen abstractInventoryScreen && abstractInventoryScreen.hideStatusEffectHud()) {

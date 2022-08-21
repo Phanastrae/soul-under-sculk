@@ -39,4 +39,6 @@ public abstract class TransformationType {
 	public abstract void handleIsInvulnerableTo(DamageSource damageSource, CallbackInfoReturnable cir);
 
 	public abstract void onTransform(TransformationHandler transHandler);
+
+	public abstract TransformationData createTransformationData(TransformationHandler transHandler);
 }

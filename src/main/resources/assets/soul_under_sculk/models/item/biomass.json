@@ -1,0 +1,7 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "soul_under_sculk:item/biomass_overlay",
+    "layer1": "soul_under_sculk:item/biomass"
+  }
+}

@@ -20,7 +20,9 @@
       "BipedEntityModelMixin",
       "ElytraFeatureRendererMixin",
       "FeatureRendererMixin",
-      "ElytraEntityModelMixin"
+      "ElytraEntityModelMixin",
+      "RenderLayerMixin",
+      "RenderPhaseMixin"
     ],
 	"injectors": {
 		"defaultRequire": 1

@@ -77,6 +77,6 @@ public class PlayerEntityMixin implements TransformableEntity {
 		TransformationHandler transHandler = ((TransformableEntity)(PlayerEntity)(Object)this).getTransHandler();
 		if(transHandler == null) return;
 		if(!transHandler.isTransformed()) return;
-		transHandler.transformationType.handleIsInvulnerableTo(damageSource, cir);
+		transHandler.getTransformation().handleIsInvulnerableTo(damageSource, cir);
 	}
 }

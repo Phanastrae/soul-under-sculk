@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import phanastrae.soul_under_sculk.packets.TransformationSyncHandler;
+import phanastrae.soul_under_sculk.networking.TransformationSyncHandler;
 import phanastrae.soul_under_sculk.util.TransformableEntity;
 
 import java.util.function.Consumer;
