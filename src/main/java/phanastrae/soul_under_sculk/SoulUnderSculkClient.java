@@ -20,6 +20,7 @@ import phanastrae.soul_under_sculk.item.ModItems;
 import phanastrae.soul_under_sculk.item.VerumItem;
 import phanastrae.soul_under_sculk.networking.ModPacketsClient;
 import phanastrae.soul_under_sculk.render.CreativeVerumChargerBlockEntityRenderer;
+import phanastrae.soul_under_sculk.render.ModRenderLayers;
 import phanastrae.soul_under_sculk.render.SculkmateEntityModel;
 import phanastrae.soul_under_sculk.render.SculkmateFeatureRenderer;
 import phanastrae.soul_under_sculk.transformation.CompositeColorEntry;

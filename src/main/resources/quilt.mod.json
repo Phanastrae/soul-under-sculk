@@ -33,6 +33,6 @@
 			}
 		]
 	},
-	"accessWidener": "soul_under_sculk.accesswidener",
+	"access_widener": "soul_under_sculk.accesswidener",
 	"mixin": "soul_under_sculk.mixins.json"
 }
