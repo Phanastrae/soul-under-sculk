@@ -299,9 +299,11 @@ public class BiomassRecipe extends SpecialCraftingRecipe {
 			if(verumBiomassKey != null && verumBiomassKey != "") {
 				verumOutput = verum.copy();
 				NbtCompound verumBiomassNbt = verumOutput.getOrCreateSubNbt("Biomass");
-				NbtCompound biomassBiomassNbt = biomass.getOrCreateSubNbt("Biomass");
-				verumBiomassNbt.put(verumBiomassKey, biomassBiomassNbt);
-				verumUpdated = true;
+				NbtCompound biomassBiomassNbt = biomass.getSubNbt("Biomass");
+				if(biomassBiomassNbt != null) {
+					verumBiomassNbt.put(verumBiomassKey, biomassBiomassNbt);
+					verumUpdated = true;
+				}
 			}
 			if(earKey != null && earKey != "") {
 				verumOutput = verum.copy();
