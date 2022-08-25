@@ -5,4 +5,5 @@ import phanastrae.soul_under_sculk.SoulUnderSculk;
 
 public class ModPackets {
 	public static Identifier ENTITY_TRANSFORM_PACKET_ID = SoulUnderSculk.id("entity_transform");
+	public static Identifier SCULKMATE_DISTORT_PACKET_ID = SoulUnderSculk.id("sculkmate_distort");
 }

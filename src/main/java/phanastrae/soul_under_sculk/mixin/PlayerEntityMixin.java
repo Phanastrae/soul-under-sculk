@@ -8,6 +8,7 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.DustParticleEffect;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
 import net.minecraft.util.random.RandomGenerator;
@@ -127,34 +128,36 @@ public class PlayerEntityMixin implements TransformableEntity {
 	@Inject(method = "jump", at = @At("HEAD"))
 	public void SoulUnderSculk_jump(CallbackInfo ci){
 		PlayerEntity player = (PlayerEntity)(Object)this;
-		if(player == null) return;
+		TransformationHandler transHandler = TransformationHandler.getFromEntity(player);
+		if(transHandler == null) return;
+		TransformationData transData = transHandler.getTransformationData();
+		if(!(transData instanceof SculkmateTransformationData)) return;
+		float amount = player.isSneaking() ? 1.5F : 1.0F;
+
 		World world = player.getWorld();
 		if(world == null) return;
 		if(world.isClient) {
-			TransformationHandler transformationHandler = TransformationHandler.getFromEntity(player);
-			if(transformationHandler != null) {
-				TransformationData transData = transHandler.getTransformationData();
-				if(transData instanceof SculkmateTransformationData) {
-					float amount = player.isSneaking() ? 1.5F : 0.8F;
-					((SculkmateTransformationData)transData).setDistortionFactorTarget(amount);
-				}
-			}
+			((SculkmateTransformationData)transData).setDistortionFactorTarget(amount);
+		} else {
+			((SculkmateTransformationData)transData).sendDistortionPacket(player, amount);
 		}
 	}
 
 	@Inject(method = "handleFallDamage", at = @At("HEAD"))
 	public void SoulUnderSculk_handleFallDamage(float fallDistance, float damageMultiplier, DamageSource damageSource, CallbackInfoReturnable ci){
 		PlayerEntity player = (PlayerEntity)(Object)this;
+		TransformationHandler transHandler = TransformationHandler.getFromEntity(player);
+		if(transHandler == null) return;
+		TransformationData transData = transHandler.getTransformationData();
+		if(!(transData instanceof SculkmateTransformationData)) return;
+		float amount = -(Math.max(0, Math.min(1, player.fallDistance * 0.15F)) * 0.8F + 0.2F);
+
 		World world = player.getWorld();
-		if(world != null && world.isClient) {
-			TransformationHandler transformationHandler = TransformationHandler.getFromEntity(player);
-			if(transformationHandler != null) {
-				TransformationData transData = transHandler.getTransformationData();
-				if(transData instanceof SculkmateTransformationData) {
-					float amount = Math.max(0, Math.min(1, player.fallDistance * 0.07F)) * 0.85F + 0.15F;
-					((SculkmateTransformationData)transData).setDistortionFactorTarget(-amount);
-				}
-			}
+		if(world == null) return;
+		if(world.isClient) {
+			((SculkmateTransformationData)transData).setDistortionFactorTarget(amount);
+		} else {
+			((SculkmateTransformationData)transData).sendDistortionPacket(player, amount);
 		}
 	}
 }
