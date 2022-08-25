@@ -8,7 +8,7 @@
 			"name": "Soul Under Sculk",
 			"description": "Contort the Soul's Vessel",
 			"contributors": {
-				"Your name here": "Phanastrae"
+				"Phanastrae" : "Owner"
 			},
 			"icon": "assets/soul_under_sculk/icon.png",
 			"license": "MIT"
