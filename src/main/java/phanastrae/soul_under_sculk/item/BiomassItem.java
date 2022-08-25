@@ -48,12 +48,8 @@ public class BiomassItem extends Item {
 	@Override
 	public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
 		NbtCompound nbtCompound = stack.getSubNbt("Biomass");
-		if (nbtCompound != null) {
-			appendTooltip(nbtCompound, tooltip);
-		}
-	}
+		if(nbtCompound == null) return;
 
-	public void appendTooltip(NbtCompound nbtCompound, List<Text> tooltip) {
 		if(nbtCompound.contains("DoInterpolation")) {
 			boolean doInterpolation = nbtCompound.getBoolean("DoInterpolation");
 			if(doInterpolation) {
@@ -76,7 +72,7 @@ public class BiomassItem extends Item {
 		int j = (int)Math.min(colors.length, times.length) - 1;
 		for(int i = j; i >= 0; i--) {
 			int time = times[i];
-			tooltip.add(Text.literal((i + 1) + ": #" + Integer.toHexString(colors[i])).setStyle(Style.EMPTY.withColor(colors[i])).append(" ").append(Text.translatable("item.soul_under_sculk.biomass.ticks", time)));
+			tooltip.add(Text.literal(String.format("%x: #%06x ", i+1, (0xFFFFFF & colors[i]))).append(Text.translatable("item.soul_under_sculk.biomass.ticks", time)).setStyle(Style.EMPTY.withColor(colors[i])));
 			if(i == j) {
 				tooltip.add(Text.translatable("item.soul_under_sculk.biomass.use_to_lengthen", Text.translatable(Items.REDSTONE.getTranslationKey()), BiomassRecipe.CHANGE_NORMAL).formatted(Formatting.DARK_GRAY));
 				tooltip.add(Text.translatable("item.soul_under_sculk.biomass.use_to_shorten", Text.translatable(Items.GLOWSTONE.getTranslationKey()), BiomassRecipe.CHANGE_NORMAL).formatted(Formatting.DARK_GRAY));
@@ -85,4 +81,5 @@ public class BiomassItem extends Item {
 			}
 		}
 	}
+
 }
