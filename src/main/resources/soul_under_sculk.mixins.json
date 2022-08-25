@@ -21,9 +21,7 @@
       "BipedEntityModelMixin",
       "ElytraFeatureRendererMixin",
       "FeatureRendererMixin",
-      "ElytraEntityModelMixin",
-      "RenderLayerMixin",
-      "RenderPhaseMixin"
+      "ElytraEntityModelMixin"
     ],
 	"injectors": {
 		"defaultRequire": 1
