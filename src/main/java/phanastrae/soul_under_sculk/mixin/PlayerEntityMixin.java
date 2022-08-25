@@ -57,7 +57,7 @@ public class PlayerEntityMixin implements TransformableEntity {
 		if(transHandler == null) return;
 		if(!transHandler.isTransformed()) return;
 
-		float eyeHeight = Math.min(1.2F, (float)cir.getReturnValue());
+		float eyeHeight = (float)cir.getReturnValue() * 1.2F / PlayerEntity.DEFAULT_EYE_HEIGHT;
 		cir.setReturnValue(eyeHeight);
 	}
 
@@ -68,8 +68,8 @@ public class PlayerEntityMixin implements TransformableEntity {
 		if(!transHandler.isTransformed()) return;
 
 		EntityDimensions normalDims = (EntityDimensions)cir.getReturnValue();
-		float width = Math.min(normalDims.width, 0.6F);
-		float height = Math.min(normalDims.height, 1.45F);
+		float width = normalDims.width * 0.6F / PlayerEntity.DEFAULT_BOUNDING_BOX_WIDTH;
+		float height = normalDims.height * 1.45F / PlayerEntity.DEFAULT_BOUNDING_BOX_HEIGHT;
 		cir.setReturnValue(EntityDimensions.changing(width, height));
 	}
 
