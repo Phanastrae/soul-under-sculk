@@ -7,6 +7,10 @@ import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
+import phanastrae.soul_under_sculk.SoulUnderSculk;
+import phanastrae.soul_under_sculk.transformation.SculkmateTransformationData;
+import phanastrae.soul_under_sculk.transformation.TransformationData;
+import phanastrae.soul_under_sculk.transformation.TransformationHandler;
 
 public class SculkmateEntityModel<T extends LivingEntity> extends EntityModel<T> {
 	public final ModelPart root;
@@ -62,8 +66,11 @@ public class SculkmateEntityModel<T extends LivingEntity> extends EntityModel<T>
 
 	@Override
 	public void animateModel(T entity, float limbAngle, float limbDistance, float tickDelta) {
+		for(ModelPart part : new ModelPart[]{this.root, this.rootFloor, this.leftLeg, this.rightLeg, this.lowerTorso}) {
+			part.resetTransform();
+		}
+
 		this.leaningPitch = entity.getLeaningPitch(tickDelta);
-		super.animateModel(entity, limbAngle, limbDistance, tickDelta);
 
 		if(entity.handSwinging) {
 			float time = entity.handSwingTicks / (entity.handSwingTicks / entity.handSwingProgress + tickDelta);
@@ -77,17 +84,25 @@ public class SculkmateEntityModel<T extends LivingEntity> extends EntityModel<T>
 			}
 		} else {
 			this.head.pitch = 0;
-			for(ModelPart tooth : this.getTeeth()) {
+			for (ModelPart tooth : this.getTeeth()) {
 				tooth.visible = false;
+			}
+		}
+
+		TransformationHandler transHandler = TransformationHandler.getFromEntity(entity);
+		if(transHandler != null) {
+			TransformationData transData = transHandler.getTransformationData();
+			if(transData instanceof SculkmateTransformationData) {
+				SculkmateTransformationData sculkmateTransData = (SculkmateTransformationData)transData;
+
+				this.rootFloor.scaleY = 1 + sculkmateTransData.getDistortionFactorLerp(tickDelta);
+				this.rootFloor.scaleX = this.rootFloor.scaleZ = 1 - sculkmateTransData.getDistortionFactorLerp(tickDelta);
 			}
 		}
 	}
 
 	@Override
 	public void setAngles(T livingEntity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
-		for(ModelPart part : new ModelPart[]{this.root, this.rootFloor, this.leftLeg, this.rightLeg, this.lowerTorso}) {
-			part.resetTransform();
-		}
 		animateLimbs(limbAngle, limbDistance);
 		runningSway(limbAngle, limbDistance, headYaw, headPitch);
 		passiveSway(animationProgress);

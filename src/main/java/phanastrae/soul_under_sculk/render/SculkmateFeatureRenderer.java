@@ -66,7 +66,7 @@ public class SculkmateFeatureRenderer extends FeatureRenderer<AbstractClientPlay
 		if(!transformationHandler.isTransformed()) return;
 
 		this.getContextModel().copyStateTo(this.model);
-		//don't need to animatemodel or setangles because we do that elsewhere
+		//don't need to animatemodel or setangles because we do that elsewhere in LivingEntityRendererMixin
 		int overlay = LivingEntityRenderer.getOverlay(livingEntity, 0.0F);
 
 		float[] eyeColor = new float[]{1F, 0.3F, 0.8F};
@@ -88,9 +88,6 @@ public class SculkmateFeatureRenderer extends FeatureRenderer<AbstractClientPlay
 			obsidianColor = tryGetColor(sculkmateTransData.getObsidianColor(), animationProgress, tickDelta, limbAngle, obsidianColor);
 			glowstoneColor = tryGetColor(sculkmateTransData.getGlowstoneColor(), animationProgress, tickDelta, limbAngle, glowstoneColor);
 			cryingColor = tryGetColor(sculkmateTransData.getCryingColor(), animationProgress, tickDelta, limbAngle, cryingColor);
-
-			this.model.rootFloor.scaleY = 1 + sculkmateTransData.getDistortionFactorLerp(tickDelta);
-			this.model.rootFloor.scaleX = this.model.rootFloor.scaleZ = 1 - sculkmateTransData.getDistortionFactorLerp(tickDelta);
 
 			String ear = sculkmateTransData.getEarType();
 			if(ear != null && !ear.equals("")) {
