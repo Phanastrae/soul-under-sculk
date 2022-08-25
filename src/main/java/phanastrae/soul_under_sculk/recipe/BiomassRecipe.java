@@ -75,6 +75,7 @@ public class BiomassRecipe extends SpecialCraftingRecipe {
 		hashMap.put(Items.GLASS_BOTTLE, "Empty");
 	});
 
+	public static final int MAX_COLOR_LAYERS = 128;
 	public static final int DEFAULT_TIME = 60;
 	public static final int MIN_TIME = 5;
 	public static final int MAX_TIME = 20*60*60; //max 1 hour
@@ -349,6 +350,10 @@ public class BiomassRecipe extends SpecialCraftingRecipe {
 
 			colors.add((rColor << 16) + (gColor << 8) + (bColor));
 			times.add(DEFAULT_TIME);
+		}
+
+		if(times.size() > MAX_COLOR_LAYERS || colors.size() > MAX_COLOR_LAYERS) {
+			return ItemStack.EMPTY;
 		}
 
 		if(lengthChange != 0 && times.size() > 0) {
