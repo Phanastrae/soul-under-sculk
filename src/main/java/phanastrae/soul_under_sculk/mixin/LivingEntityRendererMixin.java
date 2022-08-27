@@ -44,9 +44,7 @@ public class LivingEntityRendererMixin<T extends LivingEntity, M extends EntityM
 		if(transHandler.shouldClientReloadModel());
 		if(!(this.model instanceof PlayerEntityModel)) return;
 		PlayerEntityModel model = (PlayerEntityModel)this.model;
-		for(ModelPart part : new ModelPart[]{model.head, model.hat, model.body, model.jacket, model.leftArm, model.leftSleeve, model.rightArm, model.rightSleeve, model.leftLeg, model.leftPants, model.rightLeg, model.rightPants, ((PlayerEntityModelExtension)model).getEar(), ((PlayerEntityModelExtension)model).getCloak()}) {
-			part.resetTransform();
-		}
+		resetModel(model);
 	}
 
 	@Inject(method = "render", at = @At("TAIL"))
@@ -54,8 +52,13 @@ public class LivingEntityRendererMixin<T extends LivingEntity, M extends EntityM
 		if(!(livingEntity instanceof PlayerEntity && livingEntity instanceof TransformableEntity)) return;
 		TransformationHandler transHandler = ((TransformableEntity) livingEntity).getTransHandler();
 		if(transHandler == null) return;
-		if(transHandler.shouldClientReloadModel());
-		transHandler.setShouldClientReloadModel(false);
+		if(transHandler.isTransformed() && this.model instanceof PlayerEntityModel) {
+			PlayerEntityModel model = (PlayerEntityModel)this.model;
+			LivingEntityRendererMixin.resetModel(model);
+		}
+		if(transHandler.shouldClientReloadModel()) {
+			transHandler.setShouldClientReloadModel(false);
+		}
 	}
 
 	@Inject(method = "render(Lnet/minecraft/entity/LivingEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", locals = LocalCapture.CAPTURE_FAILHARD, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/model/EntityModel;setAngles(Lnet/minecraft/entity/Entity;FFFFF)V", shift = At.Shift.AFTER))
@@ -148,5 +151,11 @@ public class LivingEntityRendererMixin<T extends LivingEntity, M extends EntityM
 		model.jacket.copyTransform(model.body);
 		((PlayerEntityModelExtension)model).getEar().copyTransform(model.head);
 		((PlayerEntityModelExtension)model).getCloak().copyTransform(model.body);
+	}
+
+	private static void resetModel(PlayerEntityModel model) {
+		for(ModelPart part : new ModelPart[]{model.head, model.hat, model.body, model.jacket, model.leftArm, model.leftSleeve, model.rightArm, model.rightSleeve, model.leftLeg, model.leftPants, model.rightLeg, model.rightPants, ((PlayerEntityModelExtension)model).getEar(), ((PlayerEntityModelExtension)model).getCloak()}) {
+			part.resetTransform();
+		}
 	}
 }
