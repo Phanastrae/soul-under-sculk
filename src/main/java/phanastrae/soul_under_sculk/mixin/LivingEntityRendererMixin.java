@@ -19,7 +19,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import phanastrae.soul_under_sculk.render.*;
 import phanastrae.soul_under_sculk.transformation.TransformationHandler;
-import phanastrae.soul_under_sculk.util.TransformableEntity;
 
 @Mixin(LivingEntityRenderer.class)
 public class LivingEntityRendererMixin<T extends LivingEntity, M extends EntityModel<T>> extends EntityRenderer<T> {
@@ -38,8 +37,8 @@ public class LivingEntityRendererMixin<T extends LivingEntity, M extends EntityM
 
 	@Inject(method = "render", at = @At("HEAD"))
 	public void SoulUnderSculk_render_head(T livingEntity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, CallbackInfo ci) {
-		if(!(livingEntity instanceof PlayerEntity && livingEntity instanceof TransformableEntity)) return;
-		TransformationHandler transHandler = ((TransformableEntity) livingEntity).getTransHandler();
+		if(!(livingEntity instanceof PlayerEntity)) return;
+		TransformationHandler transHandler = TransformationHandler.getFromEntity(livingEntity);
 		if(transHandler == null) return;
 		if(transHandler.shouldClientReloadModel());
 		if(!(this.model instanceof PlayerEntityModel)) return;
@@ -49,8 +48,8 @@ public class LivingEntityRendererMixin<T extends LivingEntity, M extends EntityM
 
 	@Inject(method = "render", at = @At("TAIL"))
 	public void SoulUnderSculk_render_tail(T livingEntity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, CallbackInfo ci) {
-		if(!(livingEntity instanceof PlayerEntity && livingEntity instanceof TransformableEntity)) return;
-		TransformationHandler transHandler = ((TransformableEntity) livingEntity).getTransHandler();
+		if(!(livingEntity instanceof PlayerEntity)) return;
+		TransformationHandler transHandler = TransformationHandler.getFromEntity(livingEntity);
 		if(transHandler == null) return;
 		if(transHandler.isTransformed() && this.model instanceof PlayerEntityModel) {
 			PlayerEntityModel model = (PlayerEntityModel)this.model;
@@ -63,8 +62,8 @@ public class LivingEntityRendererMixin<T extends LivingEntity, M extends EntityM
 
 	@Inject(method = "render(Lnet/minecraft/entity/LivingEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", locals = LocalCapture.CAPTURE_FAILHARD, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/model/EntityModel;setAngles(Lnet/minecraft/entity/Entity;FFFFF)V", shift = At.Shift.AFTER))
 	public void SoulUnderSculk_render(T livingEntity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, CallbackInfo ci, float h, float j, float k, float m, float l, float n, float o) {
-		if(!(livingEntity instanceof PlayerEntity && livingEntity instanceof TransformableEntity)) return;
-		TransformationHandler transHandler = ((TransformableEntity) livingEntity).getTransHandler();
+		if(!(livingEntity instanceof PlayerEntity)) return;
+		TransformationHandler transHandler = TransformationHandler.getFromEntity(livingEntity);
 		if(transHandler == null) return;
 		if(!transHandler.isTransformed()) return;
 		if(!(this.model instanceof PlayerEntityModel)) return;

@@ -16,7 +16,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import phanastrae.soul_under_sculk.render.*;
 import phanastrae.soul_under_sculk.transformation.TransformationHandler;
-import phanastrae.soul_under_sculk.util.TransformableEntity;
 
 @Mixin(ElytraFeatureRenderer.class)
 public class ElytraFeatureRendererMixin <T extends LivingEntity, M extends EntityModel<T>> {
@@ -26,8 +25,8 @@ public class ElytraFeatureRendererMixin <T extends LivingEntity, M extends Entit
 
 	@Inject(method = "render", at = @At("HEAD"))
 	public void SoulUnderSculk_renderHead(MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, T livingEntity, float f, float g, float h, float j, float k, float l, CallbackInfo ci) {
-		if(!(livingEntity instanceof PlayerEntity && livingEntity instanceof TransformableEntity)) return;
-		TransformationHandler transHandler = ((TransformableEntity)livingEntity).getTransHandler();
+		if(!(livingEntity instanceof PlayerEntity)) return;
+		TransformationHandler transHandler = TransformationHandler.getFromEntity(livingEntity);
 		if(transHandler == null) return;
 		if(!transHandler.shouldClientReloadModel()) return;
 
@@ -39,8 +38,8 @@ public class ElytraFeatureRendererMixin <T extends LivingEntity, M extends Entit
 
 	@Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/model/ElytraEntityModel;setAngles(Lnet/minecraft/entity/LivingEntity;FFFFF)V", shift = At.Shift.AFTER))
 	public void SoulUnderSculk_render(MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, T livingEntity, float f, float g, float h, float j, float k, float l, CallbackInfo ci) {
-		if(!(livingEntity instanceof PlayerEntity && livingEntity instanceof TransformableEntity)) return;
-		TransformationHandler transHandler = ((TransformableEntity)livingEntity).getTransHandler();
+		if(!(livingEntity instanceof PlayerEntity)) return;
+		TransformationHandler transHandler = TransformationHandler.getFromEntity(livingEntity);
 		if(transHandler == null) return;
 		if(!transHandler.isTransformed()) return;
 

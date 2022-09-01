@@ -8,7 +8,6 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.DustParticleEffect;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
 import net.minecraft.util.random.RandomGenerator;
@@ -18,7 +17,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import phanastrae.soul_under_sculk.SoulUnderSculk;
 import phanastrae.soul_under_sculk.item.VerumItem;
 import phanastrae.soul_under_sculk.transformation.CompositeColorEntry;
 import phanastrae.soul_under_sculk.transformation.SculkmateTransformationData;
@@ -53,7 +51,6 @@ public class PlayerEntityMixin implements TransformableEntity {
 
 	@Inject(method = "getActiveEyeHeight", at = @At("RETURN"), cancellable = true)
 	public void SoulUnderSculk_getActiveEyeHeight(EntityPose pose, EntityDimensions dimensions, CallbackInfoReturnable cir) {
-		TransformationHandler transHandler = this.getTransHandler();
 		if(transHandler == null) return;
 		if(!transHandler.isTransformed()) return;
 
@@ -63,7 +60,6 @@ public class PlayerEntityMixin implements TransformableEntity {
 
 	@Inject(method = "getDimensions(Lnet/minecraft/entity/EntityPose;)Lnet/minecraft/entity/EntityDimensions;", at = @At("RETURN"), cancellable = true)
 	public void SoulUnderSculk_getDimensions(EntityPose pose, CallbackInfoReturnable cir) {
-		TransformationHandler transHandler = this.getTransHandler();
 		if(transHandler == null) return;
 		if(!transHandler.isTransformed()) return;
 
@@ -83,9 +79,8 @@ public class PlayerEntityMixin implements TransformableEntity {
 
 	@Inject(method = "isInvulnerableTo", at = @At("HEAD"), cancellable = true)
 	public void SoulUnderSculk_isInvulnerableTo(DamageSource damageSource, CallbackInfoReturnable cir) {
-		if(!(((PlayerEntity)(Object)this) instanceof TransformableEntity)) return;
-		TransformationHandler transHandler = ((TransformableEntity)(PlayerEntity)(Object)this).getTransHandler();
 		if(transHandler == null) return;
+
 		if(!transHandler.isTransformed()) return;
 		transHandler.getTransformation().handleIsInvulnerableTo(damageSource, cir);
 	}

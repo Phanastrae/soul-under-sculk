@@ -3,7 +3,7 @@
 	"quilt_loader": {
 		"group": "io.github.Phanastrae",
 		"id": "soul_under_sculk",
-		"version": "1.0.2+1.19",
+		"version": "1.0.3+1.19",
 		"metadata": {
 			"name": "Soul Under Sculk",
 			"description": "Contort the Soul's Vessel",

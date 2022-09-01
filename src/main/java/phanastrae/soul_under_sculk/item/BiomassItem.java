@@ -23,6 +23,8 @@ public class BiomassItem extends Item {
 
 	@Override
 	public Text getName(ItemStack stack) {
+		if(stack == null) return Text.translatable(this.getTranslationKey());
+
 		NbtCompound nbtCompound = stack.getSubNbt("Biomass");
 		if (nbtCompound != null) {
 			int[] colors = nbtCompound.getIntArray("Colors");
@@ -35,8 +37,12 @@ public class BiomassItem extends Item {
 					cce.addColorEntry(colors[i], time);
 				}
 				int t = 0;
-				if(MinecraftClient.getInstance() != null && MinecraftClient.getInstance().player != null) {
-					t = MinecraftClient.getInstance().player.age;
+				try { //in case this ever gets run on server
+					if (MinecraftClient.getInstance() != null && MinecraftClient.getInstance().player != null) {
+						t = MinecraftClient.getInstance().player.age;
+					}
+				} catch (Exception e) {
+					t = 0;
 				}
 				return Text.translatable(this.getTranslationKey()).setStyle(Style.EMPTY.withColor(cce.getColorAtTime(t)));
 			}

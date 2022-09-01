@@ -15,10 +15,12 @@ import java.util.function.Consumer;
 public class TransformationSyncHandler {
 
 	public static void syncDataOnStart(TransformableEntity entity, Consumer<Packet<?>> packetSender) {
+		if(entity.getTransHandler() == null) return;
 		syncData(entity, packetSender, false);
 	}
 
 	public static void syncDataIfNeeded(TransformableEntity entity, Consumer<Packet<?>> packetSender) {
+		if(entity.getTransHandler() == null) return;
 		if(entity.getTransHandler().shouldSyncData()) {
 			syncData(entity, packetSender, true);
 		}

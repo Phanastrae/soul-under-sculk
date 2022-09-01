@@ -7,7 +7,6 @@ import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
@@ -18,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import phanastrae.soul_under_sculk.transformation.TransformationHandler;
-import phanastrae.soul_under_sculk.util.TransformableEntity;
+import phanastrae.soul_under_sculk.transformation.TransformationType;
 
 import java.util.Collection;
 
@@ -39,10 +38,8 @@ public class InGameHudMixin extends DrawableHelper {
 	protected boolean SoulUnderSculk_renderStatusEffectOverlayIf(Collection collection, MatrixStack matrices) {
 		if(!collection.isEmpty()) return false;
 
-		ClientPlayerEntity player = this.client.player;
-		if (player == null) return true;
-		if (!(player instanceof TransformableEntity)) return true;
-		TransformationHandler transHandler = ((TransformableEntity) player).getTransHandler();
+		if(this.client == null || this.client.player == null) return true;
+		TransformationHandler transHandler = TransformationHandler.getFromEntity(this.client.player);
 		if (transHandler == null) return true;
 
 		return !transHandler.isTransformed();
@@ -51,13 +48,9 @@ public class InGameHudMixin extends DrawableHelper {
 	// when i (positive effects counter) is assigned try rendering the transformation thingy, and if so add 1 to i.
 	@ModifyVariable(method = "renderStatusEffectOverlay", at = @At("STORE"), ordinal = 0)
 	protected int SoulUnderSculk_renderStatusEffectOverlayInt(int i, MatrixStack matrices) {
-		ClientPlayerEntity player = this.client.player;
-		if(player == null) return i;
-		if(!(player instanceof TransformableEntity)) return i;
-		TransformationHandler transHandler = ((TransformableEntity) player).getTransHandler();
-		if(transHandler == null) return i;
-		if(!transHandler.isTransformed()) return i;
-		if(!transHandler.getTransformation().shouldRenderIcon()) return i;
+		if(this.client == null || this.client.player == null) return i;
+		TransformationType transType = TransformationHandler.getTypeFromEntity(this.client.player);
+		if(transType == null || !transType.shouldRenderIcon()) return i;
 
 		Screen j = this.client.currentScreen;
 		if (j instanceof AbstractInventoryScreen abstractInventoryScreen && abstractInventoryScreen.hideStatusEffectHud()) {
@@ -86,7 +79,7 @@ public class InGameHudMixin extends DrawableHelper {
 		bufferBuilder.vertex(matrix4f, (float)k, (float)l, (float)0).uv(0, 0).next();
 		BufferRenderer.drawWithShader(bufferBuilder.end());
 
-		Identifier iconId = transHandler.getTransformation().getIconId();
+		Identifier iconId = transType.getIconId();
 		if(iconId != null) {
 			RenderSystem.setShaderTexture(0, iconId);
 			RenderSystem.setShader(GameRenderer::getPositionTexShader);

@@ -25,8 +25,6 @@ import phanastrae.soul_under_sculk.transformation.TransformationHandler;
 import phanastrae.soul_under_sculk.util.TransformableEntity;
 
 import java.awt.*;
-import java.util.List;
-import java.util.Locale;
 
 @Environment(EnvType.CLIENT)
 public class SculkmateFeatureRenderer extends FeatureRenderer<AbstractClientPlayerEntity, PlayerEntityModel<AbstractClientPlayerEntity>> {
@@ -59,11 +57,12 @@ public class SculkmateFeatureRenderer extends FeatureRenderer<AbstractClientPlay
 
 	@Override
 	public void render(MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int light, AbstractClientPlayerEntity livingEntity, float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch) {
-		if(livingEntity.isInvisible()) return;
 		if(!(livingEntity instanceof TransformableEntity && livingEntity instanceof PlayerEntity)) return;
-		TransformationHandler transformationHandler = ((TransformableEntity)livingEntity).getTransHandler();
-		if(transformationHandler == null) return;
-		if(!transformationHandler.isTransformed()) return;
+		if(livingEntity.isInvisible()) return;
+
+		TransformationHandler transHandler = TransformationHandler.getFromEntity(livingEntity);
+		if(transHandler == null) return;
+		if(!transHandler.isTransformed()) return;
 
 		this.getContextModel().copyStateTo(this.model);
 		//don't need to animatemodel or setangles because we do that elsewhere in LivingEntityRendererMixin
@@ -78,7 +77,7 @@ public class SculkmateFeatureRenderer extends FeatureRenderer<AbstractClientPlay
 		float[] cryingColor = null;
 		Identifier earTexture = SCULKMATE_GLOWSCULK;
 		Identifier earTextureWhite = SCULKMATE_GLOWSCULK_WHITE;
-		TransformationData transData = transformationHandler.getTransformationData();
+		TransformationData transData = transHandler.getTransformationData();
 		if(transData instanceof SculkmateTransformationData) {
 			SculkmateTransformationData sculkmateTransData = (SculkmateTransformationData)transData;
 			eyeColor = tryGetColor(sculkmateTransData.getEyeColor(), animationProgress, tickDelta, limbAngle, eyeColor);

@@ -24,7 +24,6 @@ import phanastrae.soul_under_sculk.recipe.BiomassRecipe;
 import phanastrae.soul_under_sculk.transformation.*;
 import phanastrae.soul_under_sculk.util.TransformableEntity;
 
-import java.awt.*;
 import java.util.List;
 
 public class VerumItem extends Item {
@@ -91,7 +90,8 @@ public class VerumItem extends Item {
 			addCharge(stack, -getTransCharge(stack));
 		}
 
-		TransformationHandler transHandler = ((TransformableEntity)player).getTransHandler();
+		TransformationHandler transHandler = TransformationHandler.getFromEntity(player);
+		if(transHandler == null) return false;
 		TransformationType currentTransformation = transHandler.getTransformation();
 		if(currentTransformation == ModTransformations.SCULKMATE) {
 			transHandler.setTransformation(null);
@@ -241,8 +241,16 @@ public class VerumItem extends Item {
 	@Override
 	public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
 		super.appendTooltip(stack, world, tooltip, context);
-		TransformationHandler handler = ((TransformableEntity)MinecraftClient.getInstance().player).getTransHandler();
-		boolean isSculkmate = handler != null && ModTransformations.SCULKMATE.equals(handler.getTransformation());
+		boolean isSculkmate = false;
+		if(MinecraftClient.getInstance() != null && MinecraftClient.getInstance().player instanceof TransformableEntity) {
+			//have to specifically cast as TransformableEntity or else it thinks it's a ClientPlayerEntity and crashes on server woo
+			TransformableEntity p = (TransformableEntity) MinecraftClient.getInstance().player;
+			TransformationHandler transHandler = p.getTransHandler();
+			if (p.getTransHandler() != null) {
+				isSculkmate = ModTransformations.SCULKMATE.equals(transHandler.getTransformation());
+			}
+		}
+
 		Formatting color = Formatting.WHITE;
 		String string = "item.soul_under_sculk.verum";
 		if(isSculkmate) {

@@ -12,7 +12,6 @@ import net.minecraft.text.Text;
 import phanastrae.soul_under_sculk.SoulUnderSculk;
 import phanastrae.soul_under_sculk.transformation.TransformationHandler;
 import phanastrae.soul_under_sculk.transformation.TransformationType;
-import phanastrae.soul_under_sculk.util.TransformableEntity;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -63,7 +62,8 @@ public class SUSCommand {
 		int i = 0;
 
 		for(ServerPlayerEntity serverPlayerEntity : targets) {
-			TransformationHandler transHandler = ((TransformableEntity)(PlayerEntity)serverPlayerEntity).getTransHandler();
+			TransformationHandler transHandler = TransformationHandler.getFromEntity((PlayerEntity)serverPlayerEntity);
+			if(transHandler == null) continue;
 			TransformationType currentTransformation = transHandler.getTransformation();
 			TransformationType targetTransformation = (transArgument == null) ? null : transArgument.getTransformation();
 			if(!(currentTransformation == null && targetTransformation == null)) {
@@ -86,7 +86,8 @@ public class SUSCommand {
 		int i = 0;
 
 		for(ServerPlayerEntity serverPlayerEntity : targets) {
-			TransformationHandler transHandler = ((TransformableEntity)(PlayerEntity)serverPlayerEntity).getTransHandler();
+			TransformationHandler transHandler = TransformationHandler.getFromEntity((PlayerEntity)serverPlayerEntity);
+			if(transHandler == null) continue;
 			TransformationType currentTransformation = transHandler.getTransformation();
 			if(currentTransformation != null) {
 				transHandler.setTransformation(null);
@@ -101,7 +102,7 @@ public class SUSCommand {
 		int i = 0;
 
 		for(ServerPlayerEntity serverPlayerEntity : targets) {
-			TransformationType transformationType = ((TransformableEntity)(PlayerEntity)serverPlayerEntity).getTransHandler().getTransformation();
+			TransformationType transformationType = TransformationHandler.getTypeFromEntity((PlayerEntity)serverPlayerEntity);
 			if(transformationType == null) {
 				context.getSource().sendFeedback(Text.translatable("commands.soul_under_sculk.transform.query.notransform", serverPlayerEntity.getEntityName()), false);
 			} else {
