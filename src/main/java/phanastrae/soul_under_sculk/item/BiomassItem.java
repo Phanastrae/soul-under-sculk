@@ -11,8 +11,10 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+import phanastrae.soul_under_sculk.SoulUnderSculk;
 import phanastrae.soul_under_sculk.recipe.BiomassRecipe;
 import phanastrae.soul_under_sculk.transformation.CompositeColorEntry;
+import phanastrae.soul_under_sculk.util.TimeHelper;
 
 import java.util.List;
 
@@ -36,15 +38,7 @@ public class BiomassItem extends Item {
 					int time = (i < times.length) ? times[i] : BiomassRecipe.DEFAULT_TIME;
 					cce.addColorEntry(colors[i], time);
 				}
-				int t = 0;
-				try { //in case this ever gets run on server
-					if (MinecraftClient.getInstance() != null && MinecraftClient.getInstance().player != null) {
-						t = MinecraftClient.getInstance().player.age;
-					}
-				} catch (Exception e) {
-					t = 0;
-				}
-				return Text.translatable(this.getTranslationKey()).setStyle(Style.EMPTY.withColor(cce.getColorAtTime(t)));
+				return Text.translatable(this.getTranslationKey()).setStyle(Style.EMPTY.withColor(cce.getColorAtTime(TimeHelper.timeElapsedTicksDouble())));
 			}
 		}
 

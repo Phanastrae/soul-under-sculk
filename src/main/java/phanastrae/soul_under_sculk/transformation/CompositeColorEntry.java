@@ -66,6 +66,10 @@ public class CompositeColorEntry {
 	}
 
 	public int getColorAtTime(float time) {
+		return getColorAtTime((double)time);
+	}
+
+	public int getColorAtTime(double time) {
 		if(totalTime <= 0 || this.colorEntries.size() == 0) {
 			return 0xFFFFFF;
 		}

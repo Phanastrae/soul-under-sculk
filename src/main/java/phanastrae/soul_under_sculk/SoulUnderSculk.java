@@ -20,6 +20,7 @@ import phanastrae.soul_under_sculk.effect.ModEffects;
 import phanastrae.soul_under_sculk.recipe.ModRecipes;
 import phanastrae.soul_under_sculk.transformation.ModTransformations;
 import phanastrae.soul_under_sculk.transformation.TransformationType;
+import phanastrae.soul_under_sculk.util.TimeHelper;
 
 public class SoulUnderSculk implements ModInitializer {
 
@@ -38,6 +39,8 @@ public class SoulUnderSculk implements ModInitializer {
 
 	@Override
 	public void onInitialize(ModContainer mod) {
+		TimeHelper.countFromNow();
+
 		ModBlocks.init();
 		ModItems.init();
 		ModBlockEntities.init();

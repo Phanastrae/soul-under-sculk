@@ -20,8 +20,10 @@ import net.minecraft.util.*;
 import net.minecraft.util.random.RandomGenerator;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+import phanastrae.soul_under_sculk.SoulUnderSculk;
 import phanastrae.soul_under_sculk.recipe.BiomassRecipe;
 import phanastrae.soul_under_sculk.transformation.*;
+import phanastrae.soul_under_sculk.util.TimeHelper;
 import phanastrae.soul_under_sculk.util.TransformableEntity;
 
 import java.util.List;
@@ -293,11 +295,7 @@ public class VerumItem extends Item {
 							int time = (i < times.length) ? times[i] : BiomassRecipe.DEFAULT_TIME;
 							cce.addColorEntry(colors[i], time);
 						}
-						int t = 0;
-						if(MinecraftClient.getInstance() != null && MinecraftClient.getInstance().player != null) {
-							t = MinecraftClient.getInstance().player.age;
-						}
-						tooltip.add(Text.translatable("item.soul_under_sculk.verum.color_applied", Text.translatable("item.soul_under_sculk.verum.part." + key).setStyle(Style.EMPTY.withColor(cce.getColorAtTime(t)))));
+						tooltip.add(Text.translatable("item.soul_under_sculk.verum.color_applied", Text.translatable("item.soul_under_sculk.verum.part." + key).setStyle(Style.EMPTY.withColor(cce.getColorAtTime(TimeHelper.timeElapsedTicksDouble())))));
 					}
 				}
 			}

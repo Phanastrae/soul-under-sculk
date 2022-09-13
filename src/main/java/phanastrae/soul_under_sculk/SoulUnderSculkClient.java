@@ -24,6 +24,7 @@ import phanastrae.soul_under_sculk.render.ModRenderLayers;
 import phanastrae.soul_under_sculk.render.SculkmateEntityModel;
 import phanastrae.soul_under_sculk.render.SculkmateFeatureRenderer;
 import phanastrae.soul_under_sculk.transformation.CompositeColorEntry;
+import phanastrae.soul_under_sculk.util.TimeHelper;
 
 public class SoulUnderSculkClient implements ClientModInitializer {
 	public static final EntityModelLayer MODEL_SCULKMATE_LAYER = new EntityModelLayer(SoulUnderSculk.id("sculkmate"), "main");
@@ -46,9 +47,7 @@ public class SoulUnderSculkClient implements ClientModInitializer {
 			CompositeColorEntry cce = new CompositeColorEntry();
 			if(stack.getNbt() == null) return 0x5FFFFF;
 			cce.readNbt(stack.getNbt(), "Biomass");
-			if(MinecraftClient.getInstance() == null) return 0x5FFFFF;
-			if(MinecraftClient.getInstance().player == null) return 0x5FFFFF;
-			return cce.getColorAtTime(MinecraftClient.getInstance().player.age);
+			return cce.getColorAtTime(TimeHelper.timeElapsedTicksDouble());
 		}, ModItems.BIOMASS);
 	}
 }
