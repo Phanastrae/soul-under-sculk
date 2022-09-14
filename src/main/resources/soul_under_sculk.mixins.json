@@ -11,7 +11,8 @@
       "EntityTrackerMixin",
       "PlayerManagerMixin",
       "LivingEntityMixin",
-      "ItemEntityMixin"
+      "ItemEntityMixin",
+      "ItemStackMixin"
     ],
 	"client": [
       "InGameHudMixin",
