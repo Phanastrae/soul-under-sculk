@@ -1,6 +1,5 @@
 package phanastrae.soul_under_sculk.item;
 
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -11,7 +10,6 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-import phanastrae.soul_under_sculk.SoulUnderSculk;
 import phanastrae.soul_under_sculk.recipe.BiomassRecipe;
 import phanastrae.soul_under_sculk.transformation.CompositeColorEntry;
 import phanastrae.soul_under_sculk.util.TimeHelper;

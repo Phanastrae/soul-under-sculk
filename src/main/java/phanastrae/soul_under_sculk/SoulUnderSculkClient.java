@@ -44,8 +44,9 @@ public class SoulUnderSculkClient implements ClientModInitializer {
 		ModelPredicateProviderRegistry.register(ModItems.VERUM, new Identifier("active"), (stack, world, entity, seed) -> VerumItem.getIsTransCharged(stack) ? 1.0F : 0.0F);
 		ColorProviderRegistry.ITEM.register((stack, tintindex) -> {
 			if(tintindex > 0) return -1;
-			CompositeColorEntry cce = new CompositeColorEntry();
 			if(stack.getNbt() == null) return 0x5FFFFF;
+			if(stack.getSubNbt("Biomass") == null) return 0x5FFFFF;
+			CompositeColorEntry cce = new CompositeColorEntry();
 			cce.readNbt(stack.getNbt(), "Biomass");
 			return cce.getColorAtTime(TimeHelper.timeElapsedTicksDouble());
 		}, ModItems.BIOMASS);
