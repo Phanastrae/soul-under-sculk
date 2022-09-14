@@ -1,13 +1,17 @@
 package phanastrae.soul_under_sculk.item;
 
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Hand;
+import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import phanastrae.soul_under_sculk.recipe.BiomassRecipe;
@@ -19,6 +23,34 @@ import java.util.List;
 public class BiomassItem extends Item {
 	public BiomassItem(Settings settings) {
 		super(settings);
+	}
+
+	@Override
+	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+		ItemStack stack = user.getStackInHand(hand);
+		if(user.isSneaking()) {
+			NbtCompound biomassNbt = stack.getSubNbt("Biomass");
+			if (biomassNbt != null) {
+				int[] colorsOld = biomassNbt.getIntArray("Colors");
+				if(colorsOld.length >= 2) {
+					int[] colorsNew = new int[colorsOld.length];
+					colorsNew[0] = colorsOld[colorsOld.length - 1];
+					System.arraycopy(colorsOld, 0, colorsNew, 1, colorsOld.length - 1);
+					biomassNbt.putIntArray("Colors", colorsNew);
+				}
+
+				int[] timesOld = biomassNbt.getIntArray("Times");
+				if(timesOld.length >= 2) {
+					int[] timesNew = new int[timesOld.length];
+					timesNew[0] = timesOld[timesOld.length - 1];
+					System.arraycopy(timesOld, 0, timesNew, 1, timesOld.length - 1);
+					biomassNbt.putIntArray("Times", timesNew);
+				}
+				return TypedActionResult.success(stack);
+			}
+		}
+
+		return TypedActionResult.pass(stack);
 	}
 
 	@Override
