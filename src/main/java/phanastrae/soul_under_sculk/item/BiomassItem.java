@@ -46,7 +46,10 @@ public class BiomassItem extends Item {
 	@Override
 	public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
 		NbtCompound nbtCompound = stack.getSubNbt("Biomass");
-		if(nbtCompound == null) return;
+		if(nbtCompound == null) {
+			tooltip.add(Text.translatable("item.soul_under_sculk.biomass.is_empty").formatted(Formatting.DARK_GRAY));
+			return;
+		}
 
 		if(nbtCompound.contains("DoInterpolation")) {
 			boolean doInterpolation = nbtCompound.getBoolean("DoInterpolation");
