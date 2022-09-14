@@ -129,7 +129,7 @@ public class VerumItem extends Item {
 					player.getZ(),
 					SoundEvents.ENTITY_ENDERMAN_DEATH,
 					SoundCategory.PLAYERS,
-					2.0F,
+					0.7F,
 					0.5F
 			);
 			player.getWorld().playSound(
@@ -139,7 +139,7 @@ public class VerumItem extends Item {
 					player.getZ(),
 					SoundEvents.ENTITY_ENDERMAN_DEATH,
 					SoundCategory.PLAYERS,
-					2.0F,
+					0.5F,
 					1.5F
 			);
 			player.getWorld().playSound(
@@ -149,7 +149,7 @@ public class VerumItem extends Item {
 					player.getZ(),
 					SoundEvents.ENTITY_WARDEN_ROAR,
 					SoundCategory.PLAYERS,
-					4.0F,
+					0.9F,
 					1.5F
 			);
 			((ServerWorld)player.world).spawnParticles(ParticleTypes.SCULK_SOUL, player.getX(), player.getY(), player.getZ(), 64, 0, 0, 0, 0.1F);
